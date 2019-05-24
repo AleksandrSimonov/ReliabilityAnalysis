@@ -1,0 +1,205 @@
+﻿<Window x:Class="ReliabilityAnalysis.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ReliabilityAnalysis"
+        mc:Ignorable="d"
+        Title="ReliabilityAnalysis" Height="535.5" Width="626" WindowStartupLocation="CenterScreen" IsHitTestVisible="True">
+    <Window.Resources>
+        <!--A Style that affects all TextBlocks-->
+
+        <Style TargetType="TextBlock">
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="FontFamily" Value="Comic Sans MS"/>
+            <Setter Property="FontSize" Value="14"/>
+        </Style>
+        <Style TargetType="{x:Type TreeViewItem}">
+            <Setter Property="IsExpanded" Value="True"/>
+        </Style>
+        <Style x:Key="MenuItemEddEriStyle" TargetType="MenuItem">
+            <Setter  Property="IsEnabled" Value="False"/>
+            <Style.Triggers>
+                <DataTrigger  Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=ProjectNumber}"  Value="0">
+                    <Setter  Property="IsEnabled" Value="True"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+    <Grid >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="25"></RowDefinition>
+            <RowDefinition Height="*">
+
+            </RowDefinition>
+            <RowDefinition Height="25"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Menu Name="AppMenu">
+            <MenuItem Header="Проект">
+                <MenuItem Header="Создать новый" Click="CreateNewProject">
+                    <MenuItem.Icon>
+                        <Image Source="icons\create.png"></Image>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Открыть" Click="OpenFileDialog">
+                    <MenuItem.Icon>
+                        <Image Source="icons\open.png"></Image>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Сохранить" Click="SaveFile">
+                    <MenuItem.Icon>
+                        <Image Source="icons\save.png"></Image>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Сохранить как" Click="SaveAsFileDialog">
+                    <MenuItem.Icon>
+                        <Image Source="icons\saveAS.png"></Image>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator />
+                <MenuItem Header="Выход" Click="ExitFromApp">
+                    <MenuItem.Icon>
+                        <Image Source="icons\exit.png"></Image>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+            <MenuItem Header="Анализ">
+                <MenuItem Header="Начать" IsEnabled="False">
+                    <MenuItem.Icon>
+                        <Image Source="icons\start.png"></Image>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Остановить" IsEnabled="False">
+                    <MenuItem.Icon>
+                        <Image Source="icons\stop.png"></Image>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator />
+                <MenuItem Header="Выбрать метод анализа">
+                    <MenuItem Header="Метод Монте-Карло" Click="Method_MonteKarlo"/>
+                    <MenuItem Header="Марковские цепи"/>
+                </MenuItem>
+
+            </MenuItem>
+            <MenuItem Header="О программе">
+                <MenuItem Header="Помощь">
+                    <MenuItem.Icon>
+                        <Image Source="icons\help.png"></Image>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="О авторах">
+                    <MenuItem.Icon>
+                        <Image Source="icons\about.png"></Image>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+
+        </Menu>
+        <Grid x:Name="Grid2" Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="70*"></ColumnDefinition>
+                <ColumnDefinition Width="239*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <TreeView Grid.Column="0"  Name="TreeViewElements" Visibility="Visible"  IsTabStop="True" IsHitTestVisible="True" Focusable="True" AllowDrop="True" >
+                <TreeView.ItemTemplate>
+                    <HierarchicalDataTemplate ItemsSource="{Binding Path=Elements}" >
+                        <TextBlock Text="{Binding Name}" Visibility="Visible" MouseDown ="ClickProject">
+                            <TextBlock.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="Добавить ЭРИ" Click="ShowEriList" />
+                                </ContextMenu>
+                            </TextBlock.ContextMenu>
+                        </TextBlock>
+                        <HierarchicalDataTemplate.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <TextBlock  Text="{Binding Designation}" Name="TextDesignation" MouseDown ="ClickTextDesignation" ToolTip="{Binding Name}" IsEnabled="True">
+                                        <TextBlock.ContextMenu>
+                                            <ContextMenu>
+                                                <MenuItem Header="Переименовать" Click="ReNameElement"></MenuItem>
+                                                <MenuItem Header="Удалить" Click="DeleteElement"></MenuItem>
+                                            </ContextMenu>
+                                        </TextBlock.ContextMenu>
+                                    </TextBlock>
+                                    <TextBox Name="ReNameBox" Text="{Binding Designation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Visibility="Hidden"/>
+                                </Grid>
+                                <DataTemplate.Triggers>
+                                    <DataTrigger Binding="{Binding ElementName=SelectedElement,Path=IsReName}" Value="False">
+                                        <Setter TargetName="TextDesignation" Property="Visibility" Value="Hidden" ></Setter>
+                                        <Setter TargetName="ReNameBox" Property="Visibility" Value="Visible" ></Setter>
+                                    </DataTrigger>
+                                </DataTemplate.Triggers>
+                            </DataTemplate>
+                        </HierarchicalDataTemplate.ItemTemplate>
+                    </HierarchicalDataTemplate>
+                </TreeView.ItemTemplate>
+            </TreeView>
+            <TabControl Grid.Column="1" >
+                <TabItem Header="Свойства">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="7*"/>
+                            <RowDefinition Height="99*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="36*"/>
+                            <ColumnDefinition Width="61*"/>
+                            <ColumnDefinition Width="137*"/>
+                        </Grid.ColumnDefinitions>
+                        <DataGrid Name="GridProp" AutoGenerateColumns="False" CanUserResizeRows="False" CanUserDeleteRows="False" CanUserAddRows="False" Margin="0,0,0,49" Grid.ColumnSpan="3" Grid.RowSpan="2" >
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Наименования" Binding="{Binding Param}"  Width="*"/>
+                                <DataGridTemplateColumn  Header="Значения"  Width="150">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Grid>
+                                                <TextBox Name="tb" Visibility="Hidden" Text="{Binding SelectedParamValue, Mode=TwoWay ,UpdateSourceTrigger=LostFocus}" LostFocus="ParamValueIsSelected" ></TextBox>
+                                                <ComboBox Name="ComboInfo" Text="{Binding SelectedParamValue,  Mode=TwoWay ,UpdateSourceTrigger=LostFocus}" ItemsSource= "{Binding Path=ComboBoxItemsList}" IsEditable="True" Focusable="True" Visibility="Visible" SelectionChanged="ComboBox_SelectionChanged"/>
+                                            </Grid>
+                                            <DataTemplate.Triggers>
+                                                <DataTrigger Binding="{Binding Info.Count}" Value="0">
+                                                    <Setter TargetName="tb" Property="Visibility" Value="Visible" ></Setter>
+                                                    <Setter TargetName="ComboInfo" Property="Visibility" Value="Hidden"></Setter>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding IsReadOnly}" Value="False">
+                                                    <Setter TargetName="tb" Property="IsEnabled" Value="False"></Setter>
+                                                    <Setter TargetName="ComboInfo" Property="IsEnabled" Value="False"></Setter>
+                                                </DataTrigger>
+                                            </DataTemplate.Triggers>
+                                        </DataTemplate>
+
+                                    </DataGridTemplateColumn.CellTemplate>
+
+                                </DataGridTemplateColumn>
+
+                            </DataGrid.Columns>
+
+                        </DataGrid>
+                        <Button Content="Ок" Margin="264,352,10,10" Click="Confirm" Grid.Column="2" Grid.Row="1"/>
+                    </Grid>
+                </TabItem>
+                <TabItem Header="Расчет" GotFocus="TabItem_GotFocus">
+
+                    <DataGrid Name="GridKoeff" AutoGenerateColumns="False" CanUserResizeRows="False" CanUserDeleteRows="False" CanUserAddRows="False" Margin="0,0,0,49" >
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Наименования" Binding="{Binding Param}" IsReadOnly="False"  Width="*"/>
+                            <DataGridTextColumn  Header="Значение" Binding="{Binding Value}" Width="100" IsReadOnly="False"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </TabItem>
+
+                <TabItem Header="Результат">
+                </TabItem>
+                <Grid>
+                    <Canvas Height="100" Width="100"/>
+                </Grid>
+
+
+
+            </TabControl>
+        </Grid>
+    </Grid>
+
+
+</Window>
+
