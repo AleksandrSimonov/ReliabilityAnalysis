@@ -289,11 +289,13 @@ namespace ReliabilityAnalysis.DataBase
             {
                 Kmodel m;
                 using (var adapter = TableAdapter<Kmodel>.Open())
-                    m = adapter.Select().First(tbl => (tbl.ID_KIndex == coeff.ID_KIndex) && ((tbl.ID_Type == item.ID_Type) || (
+                    m = adapter.Select().FirstOrDefault(tbl => (tbl.ID_KIndex == coeff.ID_KIndex) && ((tbl.ID_Type == item.ID_Type) || (
                                                                   (tbl.ID_KIndex == coeff.ID_KIndex) && (tbl.ID_Type == null) && (tbl.ID_Scroll == item.ID_Scroll)) || (
                                                                   (tbl.ID_KIndex == coeff.ID_KIndex) && (tbl.ID_Type == null) && (tbl.ID_Scroll == null) && (tbl.ID_Class == item.ID_Class))
                                                                    ));
 
+                if (m == null)
+                    m = new Kmodel();
 
                 ExpressionContext context = new ExpressionContext();
                 context.Imports.AddType(typeof(Math));
@@ -301,11 +303,13 @@ namespace ReliabilityAnalysis.DataBase
 
                 context.Variables["A"] = m.A; context.Variables["Ns"] = m.Ns;
                 context.Variables["B"] = m.B; context.Variables["Nt"] = m.Nt;
-                context.Variables["G"] = m.G; context.Variables["t"] = 30.0;
-                context.Variables["H"] = m.H; context.Variables["Kn"] = value;
+                context.Variables["G"] = m.G; context.Variables["t"] = 30.1;
+                context.Variables["t"] = 30.1;
+                context.Variables["H"] = m.H; context.Variables["value"] = value;
                 context.Variables["J"] = m.J;
 
                 IDynamicExpression eDynamic = context.CompileDynamic(rows[0].MathModel);
+                var x = (double)eDynamic.Evaluate();
                 return Math.Round((double)eDynamic.Evaluate(), 4);
             }
             if (rows.FirstOrDefault(r => (r.ParamMin != 0) || (r.ParamMax != 0)) != null)

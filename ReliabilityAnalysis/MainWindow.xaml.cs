@@ -50,6 +50,8 @@ namespace ReliabilityAnalysis
             Tables.StringConnection = @"data source= C:\Users\Александр\source\repos\ReliabilityAnalysis\ReliabilityAnalysis\AppData\data.db";
 
 
+            System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
+
             projects = new ObservableCollection<Project>();
             if (False != null)
                 False("NoProjectSelected");
@@ -92,7 +94,7 @@ namespace ReliabilityAnalysis
         }
         private void ParamValueIsSelected(object sender, RoutedEventArgs e)
         {
-            GridProp.Items.Refresh();
+           // GridProp.Items.Refresh();
         }
         private void Method_MonteKarlo(object sender, RoutedEventArgs e)
         {
