@@ -124,7 +124,7 @@
                                     <TextBox Name="ReNameBox" Text="{Binding Designation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Visibility="Hidden"/>
                                 </Grid>
                                 <DataTemplate.Triggers>
-                                    <DataTrigger Binding="{Binding ElementName=SelectedElement,Path=IsReName}" Value="False">
+                                    <DataTrigger Binding="{Binding IsReName}" Value="true">
                                         <Setter TargetName="TextDesignation" Property="Visibility" Value="Hidden" ></Setter>
                                         <Setter TargetName="ReNameBox" Property="Visibility" Value="Visible" ></Setter>
                                     </DataTrigger>
@@ -161,7 +161,7 @@
                                                     <Setter TargetName="tb" Property="Visibility" Value="Visible" ></Setter>
                                                     <Setter TargetName="ComboInfo" Property="Visibility" Value="Hidden"></Setter>
                                                 </DataTrigger>
-                                                <DataTrigger Binding="{Binding IsReadOnly}" Value="False">
+                                                <DataTrigger Binding="{Binding IsReadOnly}" Value="false">
                                                     <Setter TargetName="tb" Property="IsEnabled" Value="False"></Setter>
                                                     <Setter TargetName="ComboInfo" Property="IsEnabled" Value="False"></Setter>
                                                 </DataTrigger>

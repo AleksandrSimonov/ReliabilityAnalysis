@@ -310,7 +310,7 @@ namespace ReliabilityAnalysis.DataBase
 
                 IDynamicExpression eDynamic = context.CompileDynamic(rows[0].MathModel);
                 var x = (double)eDynamic.Evaluate();
-                return Math.Round((double)eDynamic.Evaluate(), 4);
+                return x;
             }
             if (rows.FirstOrDefault(r => (r.ParamMin != 0) || (r.ParamMax != 0)) != null)
                 foreach (var row in rows)
