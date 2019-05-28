@@ -18,12 +18,16 @@ using ReliabilityAnalysis.Scheme;
 
 namespace ReliabilityAnalysis.DataBase
 {
+    /// <summary>
+    /// Коэффициент математической модели элемента
+    /// </summary>
     [Serializable]
-    public class K: PRY
+    public class Coefficient: ElementOfDataGrid
     {
         private double value = 0;
         public Node ID { get; set; }
         public string Name { get; set; }
+        public double Temperature { get; set; }
         public string ParamName { get; set; }
         public string Discription { get; set; }
         public string ParamDiscription { get; set; }
@@ -62,22 +66,34 @@ namespace ReliabilityAnalysis.DataBase
            
         }
         public Int64 ID_KIndex { get; set; }
-        new public double Value
+        public override double Value
         {
             get
             {
-                if (value != 0)
-                    return value;
-                if((SelectedParamValue!="") && (ID!=null))
-                    return Tables.GetCoefficientValue(ID, this);
+                if ((SelectedParamValue != "") && (ID != null))
+                {
+                    var x = Tables.GetCoefficientValue(this);
+                    return x;
+                }
                 return 0;
             }
         }
-        public K(Int64 ID_Kindex)
+        public new string KValue
+        {
+            get
+            {
+                return Value.ToString();
+            }
+        }
+        /// <summary>
+        /// Инициализация коэффициента
+        /// </summary>
+        /// <param name="ID_Kindex">Идентификационный номер коэффициента в БД</param>
+        public Coefficient(Int64 ID_Kindex)
         {
             this.ID_KIndex = ID_Kindex;
         }
-        public K() { }
+        public Coefficient() { }
         public override int GetHashCode()
         {
             return this.ID_KIndex.GetHashCode();
@@ -86,7 +102,7 @@ namespace ReliabilityAnalysis.DataBase
         {
             try
             {
-                return ID_KIndex.Equals(((K)obj).ID_KIndex);
+                return ID_KIndex.Equals(((Coefficient)obj).ID_KIndex);
             }
             catch (Exception)
             {

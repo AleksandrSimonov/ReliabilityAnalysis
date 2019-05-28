@@ -171,15 +171,22 @@
     <Compile Include="Algorithms\Markov.cs" />
     <Compile Include="Algorithms\MonteKarlo.cs" />
     <Compile Include="Scheme\Element.cs" />
-    <Compile Include="DataBase\K.cs" />
+    <Compile Include="DataBase\Coefficient.cs" />
     <Compile Include="DataBase\Node.cs" />
     <Compile Include="DataBase\Tables.cs" />
     <Compile Include="NewElement.xaml.cs">
       <DependentUpon>NewElement.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Scheme\IElementOfGrid.cs" />
+    <Compile Include="Scheme\ElementsOfDataGrid\FailureRate.cs" />
+    <Compile Include="Scheme\ElementsOfDataGrid\GammaPercent.cs" />
+    <Compile Include="Scheme\ElementsOfDataGrid\LambdaBasic.cs" />
+    <Compile Include="Scheme\ElementsOfDataGrid\LambdaExp.cs" />
+    <Compile Include="Scheme\ElementsOfDataGrid\MeanTimeToFailure.cs" />
+    <Compile Include="Scheme\ElementsOfDataGrid\ProbabilityOfNoFailure.cs" />
+    <Compile Include="Scheme\ElementsOfDataGrid\Temperature.cs" />
+    <Compile Include="Scheme\ElementsOfDataGrid\TimeOfExpluatation.cs" />
     <Compile Include="Scheme\Project.cs" />
-    <Compile Include="Scheme\PRY.cs" />
+    <Compile Include="Scheme\ElementsOfDataGrid\ElementOfDataGrid.cs" />
     <Compile Include="SqliteORM\AnonymousAdapter.cs" />
     <Compile Include="SqliteORM\Attributes.cs" />
     <Compile Include="SqliteORM\DbConnect.cs" />

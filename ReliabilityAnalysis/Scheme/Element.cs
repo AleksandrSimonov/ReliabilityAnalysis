@@ -5,28 +5,39 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using ReliabilityAnalysis.Scheme;
+using ReliabilityAnalysis.Scheme.ElementsOfDataGrid;
 
 namespace ReliabilityAnalysis.DataBase
 {
+    /// <summary>
+    /// Элемент схемы
+    /// </summary>
     [Serializable]
     public class Element
     {
-
-        public Element(Node item)
+        /// <summary>
+        /// Инициализация элемента схемы
+        /// </summary>
+        /// <param name="item">ID элемента в БД и его описание в проекте</param>
+        /// <param name="temperature">Температура элемента</param>
+        public Element(Node item, double temperature)
         {
+
             IDElement = item;
+            Temperature = temperature;
             Class = Tables.Class.GetName(item.ID_Class);
             Scroll = Tables.Scroll.GetName(item.ID_Class);
             Type = Tables.Type.GetName(item.ID_Type);
             Designation = item.Designation;
             LambdaBasic = new LambdaBasic(Tables.Lambda.GetLambdaValue(item));
             //MathModel = Tables.GetMathModel(item);
-            this.coefficients = Tables.GetCoefficients(item);
+            this.Сoefficients = Tables.GetCoefficients(item, temperature);
             Name = item.Name;
             this.IsReName = false;
         }
+        public double Temperature { get; set; }
         public Node IDElement { get; set; }
-        public K SelectedCoefficient { get; set; }
+        public Coefficient SelectedCoefficient { get; set; }
         public string Designation { get; set; }
         public bool IsReName{ get; set; }
         public string Name { get; }
@@ -47,14 +58,14 @@ namespace ReliabilityAnalysis.DataBase
             }
         }
         public double Reliability { get; }
-        public ObservableCollection<PRY> ElementOfGrid
+        public ObservableCollection<ElementOfDataGrid> ElementOfGrid
         {
             set { }
             get
             {
-                var elg = new ObservableCollection<PRY>();
+                var elg = new ObservableCollection<ElementOfDataGrid>();
 
-                foreach(var coeff in coefficients)
+                foreach(var coeff in Сoefficients)
                     if ((coeff.ID_KIndex != 2) && (coeff.ID_KIndex != 3))
                         elg.Add(coeff);
                 
@@ -64,7 +75,10 @@ namespace ReliabilityAnalysis.DataBase
                 return elg;
             }
         }
-        public ObservableCollection<K> coefficients { set; get; }
+        /// <summary>
+        /// Список коэффициентов элемента
+        /// </summary>
+        public ObservableCollection<Coefficient> Сoefficients { set; get; }
         public string MathModel { get; set; }
     }
 }

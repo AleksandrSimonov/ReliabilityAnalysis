@@ -257,7 +257,7 @@ namespace ReliabilityAnalysis.DataBase
             }
             return nodes;
         }
-        public static double GetCoefficientValue(Node item, K coeff)
+        public static double GetCoefficientValue(DataBase.Coefficient coeff)
         {
             DbConnection.Initialise(StringConnection);
 
@@ -266,13 +266,14 @@ namespace ReliabilityAnalysis.DataBase
 
             List<Coefficient> rows;
 
+            Double.TryParse(coeff.SelectedParamValue, out value);
 
-            if (Double.TryParse(coeff.SelectedParamValue, out value) == false)
+            if (coeff.Info.Count!=0)
                 using (var adapter = TableAdapter<Info>.Open())
                     infoId = adapter.Select().First(tbl => (tbl.ID_KIndex == coeff.ID_KIndex) && (tbl.Discription == coeff.SelectedParamValue)).ID;
 
-
-            using (var adapter = TableAdapter<Coefficient>.Open())
+            Node item = coeff.ID;
+            using (var adapter = TableAdapter<Tables.Coefficient>.Open())
                 rows = adapter.Select().Where(tbl => (tbl.ID_KIndex == coeff.ID_KIndex) && ((tbl.ID_Type == item.ID_Type) || (
                                                             (tbl.ID_KIndex == coeff.ID_KIndex) && (tbl.ID_Type == null) && (tbl.ID_Scroll == item.ID_Scroll)) || (
                                                             (tbl.ID_KIndex == coeff.ID_KIndex) && (tbl.ID_Type == null) && (tbl.ID_Scroll == null) && (tbl.ID_Class == item.ID_Class))
@@ -299,12 +300,11 @@ namespace ReliabilityAnalysis.DataBase
 
                 ExpressionContext context = new ExpressionContext();
                 context.Imports.AddType(typeof(Math));
-                List<string> s = context.Variables.Keys.ToList();//
+                List<string> s = context.Variables.Keys.ToList();
 
                 context.Variables["A"] = m.A; context.Variables["Ns"] = m.Ns;
                 context.Variables["B"] = m.B; context.Variables["Nt"] = m.Nt;
-                context.Variables["G"] = m.G; context.Variables["t"] = 30.1;
-                context.Variables["t"] = 30.1;
+                context.Variables["G"] = m.G; context.Variables["t"] = coeff.Temperature; 
                 context.Variables["H"] = m.H; context.Variables["value"] = value;
                 context.Variables["J"] = m.J;
 
@@ -312,10 +312,15 @@ namespace ReliabilityAnalysis.DataBase
                 var x = (double)eDynamic.Evaluate();
                 return x;
             }
+
             if (rows.FirstOrDefault(r => (r.ParamMin != 0) || (r.ParamMax != 0)) != null)
                 foreach (var row in rows)
+                {
+                    if ((row.ParamMax == 0) && (row.ParamMin > 0))
+                        row.ParamMax = double.MaxValue;
                     if ((row.ParamMin <= value) && (value < row.ParamMax))
                         return row.Value;
+                }
 
             if (rows.FirstOrDefault(r => r.ParamFix != 0) != null)
                 foreach (var row in rows)
@@ -323,14 +328,14 @@ namespace ReliabilityAnalysis.DataBase
                         return row.Value;
             return value;
         }
-        public static ObservableCollection<K> GetCoefficients(Node item)
+        public static ObservableCollection<DataBase.Coefficient> GetCoefficients(Node item, double temperature)
         {
             DbConnection.Initialise(StringConnection);
-            ObservableCollection<K> k;
+            ObservableCollection<DataBase.Coefficient> k;
 
             using (var adapter = TableAdapter<Coefficient>.Open())
             {
-                k = new ObservableCollection<K>();
+                k = new ObservableCollection<DataBase.Coefficient>();
 
                 var rows = adapter.Select().Where(tbl => (tbl.ID_Type == item.ID_Type) || (
                                                           (tbl.ID_Type == null) && (tbl.ID_Scroll == item.ID_Scroll)) || (
@@ -338,9 +343,9 @@ namespace ReliabilityAnalysis.DataBase
 
                 for (int i = 0; i < rows.Count; i++)
                     if ((rows[i].ID_KIndex != 2) && (rows[i].ID_KIndex != 3))
-                        k.Add(new K(rows[i].ID_KIndex));
+                        k.Add(new DataBase.Coefficient(rows[i].ID_KIndex));
 
-                k = new ObservableCollection<K>(k.Distinct());
+                k = new ObservableCollection<DataBase.Coefficient>(k.Distinct());
             }
 
             using (var adapter = TableAdapter<Info>.Open())
@@ -356,15 +361,16 @@ namespace ReliabilityAnalysis.DataBase
                     k[i].ParamDiscription = row.ParamDiscription;
                     k[i].Discription = row.Discription;
                     k[i].ID = item;
+                    k[i].Temperature = temperature;
                 }
 
             return k;
 
         }
-        public static K GetCoefficient(long idOfIndex)
+        public static DataBase.Coefficient GetCoefficient(long idOfIndex)
         {
             DbConnection.Initialise(StringConnection);
-            var k = new K();
+            var k = new DataBase.Coefficient();
 
             using (var adapter = TableAdapter<Info>.Open())
                 k.Info = adapter.Select().Where(tbl => tbl.ID_KIndex == Convert.ToInt64(idOfIndex)).ToList();

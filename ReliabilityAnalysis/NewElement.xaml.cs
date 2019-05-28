@@ -36,7 +36,7 @@ namespace ReliabilityAnalysis
             item.Designation = Designation.Text;
             if (project.Contains(item.Designation) == false)
             {
-                var el = new Element(item);
+                var el = new Element(item,project.Property[4].Value);
                 project.Add(el);
                 this.Close();
             }

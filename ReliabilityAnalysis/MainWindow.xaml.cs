@@ -20,6 +20,7 @@ using System.Collections.ObjectModel;
 using ReliabilityAnalysis.DataBase;
 using ReliabilityAnalysis.Scheme;
 using ReliabilityAnalysis.Algorithms;
+using ReliabilityAnalysis.Scheme.ElementsOfDataGrid;
 
 
 namespace ReliabilityAnalysis
@@ -46,7 +47,7 @@ namespace ReliabilityAnalysis
         public MainWindow()
         {
             InitializeComponent();
-
+            
             Tables.StringConnection = @"data source= C:\Users\Александр\source\repos\ReliabilityAnalysis\ReliabilityAnalysis\AppData\data.db";
 
 
@@ -56,7 +57,6 @@ namespace ReliabilityAnalysis
             if (False != null)
                 False("NoProjectSelected");
         }
-
         private void ShowEriList(object sender, RoutedEventArgs e)
         {
             ERI eri = new ERI(projects[0]);
@@ -79,12 +79,11 @@ namespace ReliabilityAnalysis
         }
         private void Confirm(object sender, RoutedEventArgs e)
         {
-
-            var x = projects[0].SelectedElement.coefficients[0].Value;
+            var x = projects[0].SelectedElement.Сoefficients[0].Value;
         }
         private void TabItem_GotFocus(object sender, RoutedEventArgs e)
         {
-            var source = projects[0].SelectedElement.coefficients;
+            var source = projects[0].SelectedElement.Сoefficients;
             //source.Add(projects[0].SelectedElement.Lambda);
             GridKoeff.ItemsSource = source;
         }
@@ -98,14 +97,20 @@ namespace ReliabilityAnalysis
         }
         private void Method_MonteKarlo(object sender, RoutedEventArgs e)
         {
-            MonteKarlo monteKarlo = new MonteKarlo(projects[0].Lambdas, 100000000);
-            projects[0].Results.Clear();
-            projects[0].Results.Add(new MTF(monteKarlo.MeanTimeToFailure));
-            projects[0].Results.Add(new FR(monteKarlo.FailureRate));
-            projects[0].Results.Add(new RNF(monteKarlo.FailureRate, 10000));
-            GridProp.ItemsSource = projects[0].Results;
+            try
+            {
+                MonteKarlo monteKarlo = new MonteKarlo(projects[0].Lambdas, 100000000);
+                projects[0].Results.Clear();
+                projects[0].Results.Add(new MeanTimeToFailure(monteKarlo.MeanTimeToFailure));
+                projects[0].Results.Add(new FailureRate(monteKarlo.FailureRate));
+                projects[0].Results.Add(new ProbabilityOfNoFailure(monteKarlo.FailureRate, 10000));
+                GridProp.ItemsSource = projects[0].Results;
 
-            GridProp.Items.Refresh();
+                GridProp.Items.Refresh();
+            }catch(ArgumentNullException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
         private void ClickProject(object sender, MouseButtonEventArgs e)
         {

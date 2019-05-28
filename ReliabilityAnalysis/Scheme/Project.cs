@@ -7,20 +7,21 @@ using System.Collections.ObjectModel;
 using SqliteORM;
 using ReliabilityAnalysis.DataBase;
 using ReliabilityAnalysis.Scheme;
+using ReliabilityAnalysis.Scheme.ElementsOfDataGrid;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
 namespace ReliabilityAnalysis
 {
 
-[Serializable]
- public   class Project
+    [Serializable]
+    public class Project
     {
-        private ObservableCollection<PRY> property;
+        private ObservableCollection<ElementOfDataGrid> property;
         Element selectedElement;
-        public ObservableCollection<Element> Elements{ set; get; }
-        public ObservableCollection<PRY> Results { set; get; }
-        public ObservableCollection<PRY> Property
+        public ObservableCollection<Element> Elements { set; get; }
+        public ObservableCollection<ElementOfDataGrid> Results { set; get; }
+        public ObservableCollection<ElementOfDataGrid> Property
         {
             get
             {
@@ -38,7 +39,7 @@ namespace ReliabilityAnalysis
                 {
                     lambda = Convert.ToDouble(Elements[i].LambdaExp.SelectedParamValue);
                     if (lambda == 0)
-                        return null;
+                        throw new ArgumentNullException("Эксплуатационная интенсивность отказов", "Не для всех ЭРИ посчитаны эксплуатационные интенсивности отказов");
                     lambdas.Add(lambda);
                 }
                 return lambdas;
@@ -62,7 +63,7 @@ namespace ReliabilityAnalysis
             {
                 return Elements.First(el => el.Designation == desig);
             }
-            
+
         }
 
         public bool SaveProject()
@@ -117,8 +118,8 @@ namespace ReliabilityAnalysis
         public void Add(Element el)
         {
 
-            el.coefficients.Add((K)property[0]);
-            el.coefficients.Add((K)property[1]);
+            el.Сoefficients.Add((Coefficient)property[0]);
+            el.Сoefficients.Add((Coefficient)property[1]);
 
             Elements.Add(el);
         }
@@ -137,11 +138,11 @@ namespace ReliabilityAnalysis
         {
             Elements = new ObservableCollection<Element>();
             Name = name;
-            Results = new ObservableCollection<PRY>();
-            property = new ObservableCollection<PRY>();
+            Results = new ObservableCollection<ElementOfDataGrid>();
+            property = new ObservableCollection<ElementOfDataGrid>();
             property.Add(Tables.GetCoefficient(2));
             property.Add(Tables.GetCoefficient(3));
-            property.Add(new Time());
+            property.Add(new TimeOfExpluatation());
             property.Add(new GammaPercent());
             property.Add(new Temperature());
         }
@@ -149,5 +150,5 @@ namespace ReliabilityAnalysis
 
     }
 
-    
+
 }
