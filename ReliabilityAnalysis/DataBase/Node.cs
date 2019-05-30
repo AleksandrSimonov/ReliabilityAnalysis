@@ -31,5 +31,37 @@ namespace ReliabilityAnalysis.DataBase
                 return nodes;
             }
         }
+
+        public Coefficient Coefficient
+        {
+            get => default(Coefficient);
+            set
+            {
+            }
+        }
+
+        public Element Element
+        {
+            get => default(Element);
+            set
+            {
+            }
+        }
+
+        public ERI ERI
+        {
+            get => default(ERI);
+            set
+            {
+            }
+        }
+
+        public NewElement NewElement
+        {
+            get => default(NewElement);
+            set
+            {
+            }
+        }
     }
 }

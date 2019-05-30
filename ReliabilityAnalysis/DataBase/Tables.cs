@@ -11,6 +11,15 @@ namespace ReliabilityAnalysis.DataBase
     public static class Tables
     {
         public static string StringConnection { get; set; }
+
+        public static DataBase.Coefficient Coefficient1
+        {
+            get => default(DataBase.Coefficient);
+            set
+            {
+            }
+        }
+
         [Table]
         public abstract class IdElement
         {
@@ -266,8 +275,6 @@ namespace ReliabilityAnalysis.DataBase
 
             List<Coefficient> rows;
 
-            Double.TryParse(coeff.SelectedParamValue, out value);
-
             if (coeff.Info.Count!=0)
                 using (var adapter = TableAdapter<Info>.Open())
                     infoId = adapter.Select().First(tbl => (tbl.ID_KIndex == coeff.ID_KIndex) && (tbl.Discription == coeff.SelectedParamValue)).ID;
@@ -281,10 +288,18 @@ namespace ReliabilityAnalysis.DataBase
 
             if (infoId != 0)
             {
-                foreach (var row in rows)
-                    if (row.Info == infoId)
-                        return row.Value;
+                if (rows.Count!=0)
+                {
+                    foreach (var row in rows)
+                        if (row.Info == infoId)
+                            return row.Value;
+                }
+                else
+                    return 1;
             }
+
+            if (!Double.TryParse(coeff.SelectedParamValue, out value))
+                throw new ArgumentException("Недопустимое значение переменной");
 
             if (rows.FirstOrDefault(r => r.MathModel != null) != null)
             {
@@ -326,7 +341,7 @@ namespace ReliabilityAnalysis.DataBase
                 foreach (var row in rows)
                     if (row.ParamFix != value)
                         return row.Value;
-            return value;
+            throw new ArgumentException("Недопустимое значение переменной");
         }
         public static ObservableCollection<DataBase.Coefficient> GetCoefficients(Node item, double temperature)
         {

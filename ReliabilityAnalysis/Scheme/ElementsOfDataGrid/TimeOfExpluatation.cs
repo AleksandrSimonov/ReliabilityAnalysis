@@ -32,5 +32,12 @@ namespace ReliabilityAnalysis.Scheme.ElementsOfDataGrid
             }
         }
 
+        public Project Project
+        {
+            get => default(Project);
+            set
+            {
+            }
+        }
     }
 }

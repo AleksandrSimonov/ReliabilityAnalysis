@@ -17,26 +17,43 @@
         <Style TargetType="{x:Type TreeViewItem}">
             <Setter Property="IsExpanded" Value="True"/>
         </Style>
-        <Style x:Key="MenuItemEddEriStyle" TargetType="MenuItem">
+        <Style x:Key="isProjectIsUnLock" TargetType="MenuItem">
+            <Style.Triggers>
+                <DataTrigger  Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}},  Path=Projects.Count}"  Value="1">
+                    <Setter  Property="IsEnabled" Value="True"/>
+                </DataTrigger>
+                <DataTrigger  Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=Projects.Count}"  Value="0">
+                    <Setter  Property="IsEnabled" Value="False"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="isEriIsUnLock" TargetType="MenuItem">
             <Setter  Property="IsEnabled" Value="False"/>
             <Style.Triggers>
-                <DataTrigger  Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=ProjectNumber}"  Value="0">
+                <DataTrigger  Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}},  Path=Projects.Count}"  Value="1">
                     <Setter  Property="IsEnabled" Value="True"/>
                 </DataTrigger>
             </Style.Triggers>
         </Style>
     </Window.Resources>
-    <Grid >
+    <Grid Name="GridT" >
+        <Grid.Resources>
+            <DataTemplate DataType="IsProjectExists" x:Name="TamplateT">
+                <DataTemplate.Triggers>
+                    <DataTrigger Binding="{Binding Path=ProjectNumber}" Value="0">
+                        <Setter Property="IsEnabled" Value="False"></Setter>
+                    </DataTrigger>
+                </DataTemplate.Triggers>
+            </DataTemplate>
+        </Grid.Resources>
         <Grid.RowDefinitions>
-            <RowDefinition Height="25"></RowDefinition>
-            <RowDefinition Height="*">
-
-            </RowDefinition>
-            <RowDefinition Height="25"></RowDefinition>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="25"/>
         </Grid.RowDefinitions>
         <Menu Name="AppMenu">
             <MenuItem Header="Проект">
-                <MenuItem Header="Создать новый" Click="CreateNewProject">
+                <MenuItem Header="Создать новый" Click="CreateNewProject" >
                     <MenuItem.Icon>
                         <Image Source="icons\create.png"></Image>
                     </MenuItem.Icon>
@@ -46,12 +63,12 @@
                         <Image Source="icons\open.png"></Image>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Сохранить" Click="SaveFile">
+                <MenuItem Header="Сохранить" Click="SaveFile" Style="{StaticResource isProjectIsUnLock}">
                     <MenuItem.Icon>
                         <Image Source="icons\save.png"></Image>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Сохранить как" Click="SaveAsFileDialog">
+                <MenuItem Header="Сохранить как" Click="SaveAsFileDialog" Style="{StaticResource isProjectIsUnLock}">
                     <MenuItem.Icon>
                         <Image Source="icons\saveAS.png"></Image>
                     </MenuItem.Icon>
@@ -64,20 +81,20 @@
                 </MenuItem>
             </MenuItem>
             <MenuItem Header="Анализ">
-                <MenuItem Header="Начать" IsEnabled="False">
+                <MenuItem Header="Начать" IsEnabled="False" Visibility="Collapsed">
                     <MenuItem.Icon>
                         <Image Source="icons\start.png"></Image>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Остановить" IsEnabled="False">
+                <MenuItem Header="Остановить" IsEnabled="False"  Visibility="Collapsed">
                     <MenuItem.Icon>
                         <Image Source="icons\stop.png"></Image>
                     </MenuItem.Icon>
                 </MenuItem>
-                <Separator />
-                <MenuItem Header="Выбрать метод анализа">
+                <Separator  Visibility="Collapsed"/>
+                <MenuItem Header="Выбрать метод анализа" Style="{StaticResource isEriIsUnLock}">
                     <MenuItem Header="Метод Монте-Карло" Click="Method_MonteKarlo"/>
-                    <MenuItem Header="Марковские цепи" />
+                    <MenuItem Header="Марковские цепи" Click="Markov_Method"/>
                 </MenuItem>
 
             </MenuItem>
@@ -148,13 +165,22 @@
                         </Grid.ColumnDefinitions>
                         <DataGrid Name="GridProp" AutoGenerateColumns="False" CanUserResizeRows="False" CanUserDeleteRows="False" CanUserAddRows="False" Margin="0,0,0,49" Grid.ColumnSpan="3" Grid.RowSpan="2" >
                             <DataGrid.Columns>
-                                <DataGridTextColumn Header="Наименования" Binding="{Binding Param}"  Width="*"/>
+                                <DataGridTemplateColumn Header="Наименования"  Width="*">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Grid>
+                                                <TextBlock Text="{Binding Param}"/>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
                                 <DataGridTemplateColumn  Header="Значения"  Width="150">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <Grid>
-                                                <TextBox Name="tb" Visibility="Hidden" Text="{Binding SelectedParamValue, Mode=TwoWay ,UpdateSourceTrigger=LostFocus}" LostFocus="ParamValueIsSelected" ></TextBox>
-                                                <ComboBox Name="ComboInfo" Text="{Binding SelectedParamValue,  Mode=TwoWay ,UpdateSourceTrigger=LostFocus}" ItemsSource= "{Binding Path=ComboBoxItemsList}" IsEditable="True" Focusable="True" Visibility="Visible" SelectionChanged="ComboBox_SelectionChanged"/>
+                                                <TextBox Name="tb" Visibility="Hidden" Text="{Binding SelectedParamValue, Mode=TwoWay ,UpdateSourceTrigger=LostFocus}" LostFocus="ParamValueIsSelected" >
+                                                </TextBox>
+                                                <ComboBox Name="ComboInfo" Text="{Binding SelectedParamValue,  Mode=TwoWay ,UpdateSourceTrigger=LostFocus}" ItemsSource= "{Binding Path=ComboBoxItemsList}" IsEditable="True" IsReadOnly="False"  Focusable="True" Visibility="Visible" SelectedIndex="-1" IsSynchronizedWithCurrentItem="False" AllowDrop="True" IsHitTestVisible="True" StaysOpenOnEdit="True" IsTextSearchEnabled="True" IsTabStop="False" />
                                             </Grid>
                                             <DataTemplate.Triggers>
                                                 <DataTrigger Binding="{Binding Info.Count}" Value="0">
@@ -164,6 +190,9 @@
                                                 <DataTrigger Binding="{Binding IsReadOnly}" Value="false">
                                                     <Setter TargetName="tb" Property="IsEnabled" Value="False"></Setter>
                                                     <Setter TargetName="ComboInfo" Property="IsEnabled" Value="False"></Setter>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding IsCorrect}" Value="False">
+                                                    <Setter TargetName="tb" Property="BorderBrush"  Value="Red"/>
                                                 </DataTrigger>
                                             </DataTemplate.Triggers>
                                         </DataTemplate>
@@ -178,7 +207,7 @@
                         <Button Content="Ок" Margin="264,352,10,10" Click="Confirm" Grid.Column="2" Grid.Row="1"/>
                     </Grid>
                 </TabItem>
-                <TabItem Header="Расчет" GotFocus="TabItem_GotFocus">
+                <TabItem Header="Расчет" GotFocus="TabItem_GotFocus" Visibility="Collapsed">
 
                     <DataGrid Name="GridKoeff" AutoGenerateColumns="False" CanUserResizeRows="False" CanUserDeleteRows="False" CanUserAddRows="False" Margin="0,0,0,49" >
                         <DataGrid.Columns>
@@ -203,15 +232,13 @@
                         </DataGrid.Columns>
                     </DataGrid>
                 </TabItem>
-
-                <TabItem Header="Результат">
+                <TabItem Header="Результат" Visibility="Collapsed">
+                    <Grid>
+                        <Canvas>
+                            
+                        </Canvas>
+                    </Grid>
                 </TabItem>
-                <Grid>
-                    <Canvas Height="100" Width="100"/>
-                </Grid>
-
-
-
             </TabControl>
         </Grid>
     </Grid>

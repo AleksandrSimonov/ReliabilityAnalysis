@@ -13,15 +13,51 @@ namespace ReliabilityAnalysis.Algorithms
         private int Count;
         TRandom random;
 
-        public double MeanTimeToFailure { get; } //Средняя наработка на отказ
-        public double FailureRate //Интенсивность отказов
+        /// <summary>
+        /// Гамма-процент
+        /// </summary>
+        public double GammaPercent { get; }
+
+        /// <summary>
+        /// Гамма-процентная наработка до отказа
+        /// </summary>
+        public double GammaPercentTimeToFailure
+        {
+            get
+            {
+                return -MeanTimeToFailure * Math.Log(GammaPercent / 100.0);
+            }
+        }
+
+        /// <summary>
+        /// Средняя наработка до отказ
+        /// </summary>
+        public double MeanTimeToFailure { get; }
+
+        /// <summary>
+        /// Интенсивность отказов
+        /// </summary>
+        public double FailureRate
         {
             get
             {
                 return 1.0 / MeanTimeToFailure;
             }
         }
-        private double MTF()// Средняя наработка на отказ
+
+        public Project Project
+        {
+            get => default(Project);
+            set
+            {
+            }
+        }
+
+        /// <summary>
+        /// Средняя наработка до отказа
+        /// </summary>
+        /// <returns></returns>
+        private double MTF()
         {
             double time = 0, time2, atime = 0;
 
@@ -41,14 +77,19 @@ namespace ReliabilityAnalysis.Algorithms
 
         }
 
-        public MonteKarlo(List<double> lambdas, int Count)
+        /// <summary>
+        /// Анализ надежности методом Монте-Карло
+        /// </summary>
+        /// <param name="lambdas">Список эксплуатационных интенсивностей отказов всех Эри, входящих в проект</param>
+        /// <param name="Count">Число опытом в методе</param>
+        /// <param name="gammaPercent">Гамма-процент</param>
+        public MonteKarlo(List<double> lambdas, int Count, double gammaPercent)
         {
             this.lambdas = lambdas;
             this.Count = Count;
             random = new TRandom();
             MeanTimeToFailure = MTF();
-
-
+            GammaPercent = gammaPercent;
         }
 
 

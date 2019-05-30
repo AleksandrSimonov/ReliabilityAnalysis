@@ -9,12 +9,35 @@ namespace ReliabilityAnalysis
 {
     public class Markov
     {
-        int S_count;
-        int[,] Graph_P;
+        private List<double> lambdas;
 
-        private int[,] Graph_Create() { return null; }
-        private void Solution() { }
-        private void A_Run() { }
+        public double MeanTimeToFailure { get; } //Средняя наработка на отказ
+        public double FailureRate //Интенсивность отказов
+        {
+            get
+            {
+                return 1.0 / MeanTimeToFailure;
+            }
+        }
+
+        public Project Project
+        {
+            get => default(Project);
+            set
+            {
+            }
+        }
+
+        private double MTF()// Средняя наработка на отказ
+        {
+            return 1.0 / lambdas.Sum();
+        }
+
+        public Markov(List<double> lambdas)
+        {
+            this.lambdas = lambdas;
+            MeanTimeToFailure = MTF();
+        }
 
 
     }

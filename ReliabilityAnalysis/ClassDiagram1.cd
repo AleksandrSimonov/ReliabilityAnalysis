@@ -1,0 +1,265 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="ReliabilityAnalysis.AddNewProject" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="32.5" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAEAAAQBAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>AddNewProject.xaml.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="MainWindow" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="ReliabilityAnalysis.Markov" Collapsed="true">
+    <Position X="30" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAgAAAAAABEAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Algorithms\Markov.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Project" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="ReliabilityAnalysis.ERI" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="34.75" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAEAAAAAAgAAAAAAAQAAAAAIAA=</HashCode>
+      <FileName>ERI.xaml.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="MainWindow" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="ReliabilityAnalysis.MainWindow" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="35" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAQAAYAAQAQAgACIAAAAAAFAAAEQAFAIAAARCCUA=</HashCode>
+      <FileName>MainWindow.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="ReliabilityAnalysis.NewElement" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="37.25" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABAAAAAAAAAQAAAAAAAgAIAAAAAAAAAAAAAA=</HashCode>
+      <FileName>NewElement.xaml.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="ERI" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="ReliabilityAnalysis.Project" Collapsed="true">
+    <Position X="32" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAAAAAAAABLgASACQACgACAAAAAAAAAQBUAQE=</HashCode>
+      <FileName>Scheme\Project.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ReliabilityAnalysis.Algorithms.MonteKarlo" Collapsed="true">
+    <Position X="27.75" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAgAgAAAABEAAAAAAAAACAQAAAAAAAAAAAQQAAAAAAA=</HashCode>
+      <FileName>Algorithms\MonteKarlo.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Project" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="ReliabilityAnalysis.DataBase.Node" Collapsed="true">
+    <Position X="34.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAAABAAQDAAAAAgAAAQAAEAAIgAAAAAAAAAAYAA=</HashCode>
+      <FileName>DataBase\Node.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Coefficient" />
+      <Property Name="Element" />
+      <Property Name="ERI" />
+      <Property Name="NewElement" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="ReliabilityAnalysis.DataBase.Tables">
+    <Position X="43.25" Y="0.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Class Name="ReliabilityAnalysis.DataBase.Tables.Lambda" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>DataBase\Tables.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="ReliabilityAnalysis.DataBase.Tables.Kmodel" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>DataBase\Tables.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="ReliabilityAnalysis.DataBase.Tables.MathModels" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>DataBase\Tables.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="ReliabilityAnalysis.DataBase.Tables.IdElement" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>DataBase\Tables.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="ReliabilityAnalysis.DataBase.Tables.Info" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>DataBase\Tables.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="ReliabilityAnalysis.DataBase.Tables.Type" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>DataBase\Tables.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="ReliabilityAnalysis.DataBase.Tables.Class" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>DataBase\Tables.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="ReliabilityAnalysis.DataBase.Tables.KIndex" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>DataBase\Tables.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="ReliabilityAnalysis.DataBase.Tables.Scroll" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>DataBase\Tables.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="ReliabilityAnalysis.DataBase.Tables.Coefficient" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>DataBase\Tables.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>QAAAAABABQAAAAAAAAAAAAAQAEAAABAAAAAAAAAAAAA=</HashCode>
+      <FileName>DataBase\Tables.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Coefficient1" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="ReliabilityAnalysis.DataBase.Element" Collapsed="true">
+    <Position X="35" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAEKAABAAAAAAAJAEQQAAAAAAgAAAQAgAAAEAgI=</HashCode>
+      <FileName>Scheme\Element.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ReliabilityAnalysis.DataBase.Coefficient" Collapsed="true">
+    <Position X="34" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAIAAAAAgAAAgA4AAAQAAAAAAKAQAYAgEAAEAAA=</HashCode>
+      <FileName>DataBase\Coefficient.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Element" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="ReliabilityAnalysis.Scheme.ElementOfDataGrid" Collapsed="true">
+    <Position X="34.5" Y="11" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAIAAAAAAAAQEAAAAAAAAAAAAAAQAQIgAEAAAAA=</HashCode>
+      <FileName>Scheme\ElementsOfDataGrid\ElementOfDataGrid.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ReliabilityAnalysis.Scheme.ElementsOfDataGrid.FailureRate" Collapsed="true">
+    <Position X="24.5" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAQAAAACAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Scheme\ElementsOfDataGrid\FailureRate.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Project" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="ReliabilityAnalysis.Scheme.ElementsOfDataGrid.GammaPercent" Collapsed="true">
+    <Position X="29.25" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAACAAAAAAAABAQAAAgAAAAAAA=</HashCode>
+      <FileName>Scheme\ElementsOfDataGrid\GammaPercent.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Project" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="ReliabilityAnalysis.Scheme.ElementsOfDataGrid.GammaPercentTimeToFailure" Collapsed="true">
+    <Position X="31.25" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAQAAAACAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Scheme\ElementsOfDataGrid\GammaPercentTimeToFailure.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Project" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="ReliabilityAnalysis.Scheme.ElementsOfDataGrid.LambdaBasic" Collapsed="true">
+    <Position X="32.25" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Scheme\ElementsOfDataGrid\LambdaBasic.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Element" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="ReliabilityAnalysis.Scheme.ElementsOfDataGrid.LambdaExp" Collapsed="true">
+    <Position X="35.75" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAQAAgAACAAQAAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>Scheme\ElementsOfDataGrid\LambdaExp.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Element" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="ReliabilityAnalysis.Scheme.ElementsOfDataGrid.MeanTimeToFailure" Collapsed="true">
+    <Position X="38" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAQAAAACAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Scheme\ElementsOfDataGrid\MeanTimeToFailure.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Project" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="ReliabilityAnalysis.Scheme.ElementsOfDataGrid.ProbabilityOfNoFailure" Collapsed="true">
+    <Position X="40.25" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAIAAAAAAAQAAAACAAAAAAAAAAAAAAgAAAAAQA=</HashCode>
+      <FileName>Scheme\ElementsOfDataGrid\ProbabilityOfNoFailure.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Project" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="ReliabilityAnalysis.Scheme.ElementsOfDataGrid.Temperature" Collapsed="true">
+    <Position X="42.5" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAQgAAAAAAA=</HashCode>
+      <FileName>Scheme\ElementsOfDataGrid\Temperature.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Project" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="ReliabilityAnalysis.Scheme.ElementsOfDataGrid.TimeOfExpluatation" Collapsed="true">
+    <Position X="26.75" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAgACAAAAAAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>Scheme\ElementsOfDataGrid\TimeOfExpluatation.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Project" />
+    </ShowAsAssociation>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

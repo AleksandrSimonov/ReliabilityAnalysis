@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 namespace ReliabilityAnalysis.Scheme.ElementsOfDataGrid
 {
     /// <summary>
-    /// Интенсивность отказов всего проекта
+    /// Гамма-процентная наработка до отказа
     /// </summary>
     [Serializable]
-    public class FailureRate : ElementOfDataGrid
+    public class GammaPercentTimeToFailure : ElementOfDataGrid
     {
         public override bool IsReadOnly { get { return false; } }
 
@@ -25,12 +25,12 @@ namespace ReliabilityAnalysis.Scheme.ElementsOfDataGrid
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="fr">Интенсивность отказов</param>
-        public FailureRate(double fr)
+        /// <param name="gptf">Значение гамма-процентной наработки до отказа</param>
+        public GammaPercentTimeToFailure(double gptf)
         {
-            Param = "Интенсивность отказов";
-            Value = fr;
-        }
+            Param = "Гамма-процентная наработка до отказа";
+            Value = gptf;
 
+        }
     }
 }

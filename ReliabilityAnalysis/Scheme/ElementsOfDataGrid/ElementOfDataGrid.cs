@@ -13,6 +13,7 @@ namespace ReliabilityAnalysis.Scheme
     [Serializable]
     public abstract class ElementOfDataGrid
     {
+        private string selectedParamValue;
         /// <summary>
         /// Значение столбца "Свойства"
         /// </summary>
@@ -20,14 +21,45 @@ namespace ReliabilityAnalysis.Scheme
         {
             get
             {
-                var x = Value.ToString();
-                return x;
+                try
+                {
+                    var x = Value.ToString();
+                    return x;
+                }catch(ArgumentException ex)
+                {
+                    return "undefind";
+                }
             }
             set
             {
-                Value = Convert.ToDouble(value);
+                try
+                {
+                    Value = Convert.ToDouble(value);
+                }catch(FormatException ex)
+                {
+                    IsCorrect = false;
+                   selectedParamValue = value;
+                }
             }
         }
+        public bool IsCorrect
+        {
+            get
+            {
+                try
+                {
+                    var x = Value;
+                    //Value = Convert.ToDouble(selectedParamValue);
+                    return true;
+                }
+                catch (ArgumentException ex)
+                {
+                    return false;
+                }
+            }
+            private set { }
+        }
+        
         public string KValue
         {
             get

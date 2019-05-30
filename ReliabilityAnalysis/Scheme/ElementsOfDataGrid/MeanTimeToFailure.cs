@@ -13,6 +13,15 @@ namespace ReliabilityAnalysis.Scheme.ElementsOfDataGrid
     public class MeanTimeToFailure: ElementOfDataGrid
     {
         public override bool IsReadOnly { get { return false; } }
+
+        public Project Project
+        {
+            get => default(Project);
+            set
+            {
+            }
+        }
+
         /// <summary>
         /// 
         /// </summary>

@@ -33,6 +33,15 @@ namespace ReliabilityAnalysis
             this.project = project;
             TreeView.ItemsSource = nodes;
         }
+
+        public MainWindow MainWindow
+        {
+            get => default(MainWindow);
+            set
+            {
+            }
+        }
+
         private void SelectItem(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             var item = (Node) TreeView.SelectedItem;

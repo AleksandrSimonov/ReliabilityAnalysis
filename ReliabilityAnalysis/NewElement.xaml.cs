@@ -31,6 +31,14 @@ namespace ReliabilityAnalysis
             Designation.Text = item.DefDesign+(project.Elements.Count+1).ToString();
         }
 
+        public ERI ERI
+        {
+            get => default(ERI);
+            set
+            {
+            }
+        }
+
         private void AddEriToProject(object sender, RoutedEventArgs e)
         {
             item.Designation = Designation.Text;

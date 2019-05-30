@@ -134,10 +134,16 @@ namespace ReliabilityAnalysis
             selectedElement = this[design];
         }
 
+        public IDisposable Subscribe(IObserver<int> observer)
+        {
+            throw new NotImplementedException();
+        }
+
         public Project(string name)
         {
             Elements = new ObservableCollection<Element>();
             Name = name;
+            
             Results = new ObservableCollection<ElementOfDataGrid>();
             property = new ObservableCollection<ElementOfDataGrid>();
             property.Add(Tables.GetCoefficient(2));

@@ -22,13 +22,28 @@ namespace ReliabilityAnalysis.Scheme.ElementsOfDataGrid
                 var lambda = lambdaBasic;
                 foreach (var k in selectedElement.Сoefficients)
                 {
-                    k.ID = selectedElement.IDElement;
-                    lambda *= k.Value;
+                    try
+                    {
+                        k.ID = selectedElement.IDElement;
+                        lambda *= k.Value;
+                    }catch(ArgumentException ex)
+                    {
+                        throw ex;
+                    }
                 }
                 return lambda;
             }
         }
         public override bool IsReadOnly { get { return false; } }
+
+        public Element Element
+        {
+            get => default(Element);
+            set
+            {
+            }
+        }
+
         /// <summary>
         /// 
         /// </summary>

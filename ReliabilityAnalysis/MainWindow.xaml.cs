@@ -30,20 +30,20 @@ namespace ReliabilityAnalysis
     /// </summary>
     public partial class MainWindow : Window
     {
-        public int ProjectNumber
+        public int ProjectNumber { get; set; }
+
+        public ObservableCollection<Project> Projects { get; set; }
+       
+        public Project SelectedProject
         {
-            set;
-
-            get;
-
+            get
+            {
+                if (Projects != null)
+                    return null;
+                return Projects[0];
+            }
         }
-        public delegate void ProjectIsSelected(string message);
 
-        public event ProjectIsSelected True;
-        public event ProjectIsSelected False;
-
-
-        ObservableCollection<Project> projects;
         public MainWindow()
         {
             InitializeComponent();
@@ -53,38 +53,46 @@ namespace ReliabilityAnalysis
 
             System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
 
-            projects = new ObservableCollection<Project>();
-            if (False != null)
-                False("NoProjectSelected");
+            Projects = new ObservableCollection<Project>();
+
+            Binding binding = new Binding();
+            
+            //binding.ElementName = "myTextBox"; // элемент-источник
+           
+            binding.Path = new PropertyPath("ProjectNumber"); // свойство элемента-источника
+            AppMenu.SetBinding(MenuItem.IsEnabledProperty, binding);
+
+            TextBox tb = new TextBox();
+            
+
+
         }
         private void ShowEriList(object sender, RoutedEventArgs e)
         {
-            ERI eri = new ERI(projects[0]);
+            ERI eri = new ERI(Projects[0]);
             eri.ShowDialog();
         }
         private void ClickTextDesignation(object sender, MouseEventArgs e)
         {
-            projects[0].SelectElement(((TextBlock)sender).Text);
-            var source = projects[0].SelectedElement.ElementOfGrid;
+            Projects[0].SelectElement(((TextBlock)sender).Text);
+            var source = Projects[0].SelectedElement.ElementOfGrid;
             GridProp.ItemsSource = source;
+            AppMenu.Items.Refresh();
         }
         private void CreateNewProject(object sender, RoutedEventArgs e)
         {
-            ProjectNumber = 1;
-            projects.Add(new Project("Проект" + 1));
-            TreeViewElements.ItemsSource = projects;
-            if (True != null)
-                True(projects.Last().Name);
+            AddNewProject newProject = new AddNewProject(this);
+            newProject.ShowDialog();
 
         }
         private void Confirm(object sender, RoutedEventArgs e)
         {
-            var x = projects[0].SelectedElement.Сoefficients[0].Value;
+            var x = Projects[0].SelectedElement.Сoefficients[0].Value;
         }
         private void TabItem_GotFocus(object sender, RoutedEventArgs e)
         {
-            var source = projects[0].SelectedElement.Сoefficients;
-            //source.Add(projects[0].SelectedElement.Lambda);
+            var source = Projects[0].SelectedElement.Сoefficients;
+            //source.Add(Projects[0].SelectedElement.Lambda);
             GridKoeff.ItemsSource = source;
         }
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -93,18 +101,19 @@ namespace ReliabilityAnalysis
         }
         private void ParamValueIsSelected(object sender, RoutedEventArgs e)
         {
-           // GridProp.Items.Refresh();
+           GridProp.Items.Refresh();
         }
         private void Method_MonteKarlo(object sender, RoutedEventArgs e)
         {
             try
             {
-                MonteKarlo monteKarlo = new MonteKarlo(projects[0].Lambdas, 100000000);
-                projects[0].Results.Clear();
-                projects[0].Results.Add(new MeanTimeToFailure(monteKarlo.MeanTimeToFailure));
-                projects[0].Results.Add(new FailureRate(monteKarlo.FailureRate));
-                projects[0].Results.Add(new ProbabilityOfNoFailure(monteKarlo.FailureRate, 10000));
-                GridProp.ItemsSource = projects[0].Results;
+                MonteKarlo monteKarlo = new MonteKarlo(Projects[0].Lambdas, 100000000, 95);
+                Projects[0].Results.Clear();
+                Projects[0].Results.Add(new MeanTimeToFailure(monteKarlo.MeanTimeToFailure));
+                Projects[0].Results.Add(new FailureRate(monteKarlo.FailureRate));
+                Projects[0].Results.Add(new ProbabilityOfNoFailure(monteKarlo.FailureRate, 10000));
+                Projects[0].Results.Add(new GammaPercentTimeToFailure(monteKarlo.GammaPercentTimeToFailure));
+                GridProp.ItemsSource = Projects[0].Results;
 
                 GridProp.Items.Refresh();
             }catch(ArgumentNullException ex)
@@ -114,20 +123,17 @@ namespace ReliabilityAnalysis
         }
         private void ClickProject(object sender, MouseButtonEventArgs e)
         {
-            GridProp.ItemsSource = projects[0].Property.Concat(projects[0].Results);
+            GridProp.ItemsSource = Projects[0].Property.Concat(Projects[0].Results);
             GridProp.Items.Refresh();
         }
-
         private void ReNameElement(object sender, RoutedEventArgs e)
         {
-            projects[0].SelectedElement.IsReName = true;
+            Projects[0].SelectedElement.IsReName = true;
         }
-
         private void ReNameBox_MouseDown(object sender, MouseButtonEventArgs e)
         {
 
         }
-
         private void OpenFileDialog(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -137,8 +143,8 @@ namespace ReliabilityAnalysis
             var project = Project.OpenProject(openFileDialog.FileName);
             if (project != null)
             {
-                projects.Add(project);
-                TreeViewElements.ItemsSource = projects;
+                Projects.Add(project);
+                TreeViewElements.ItemsSource = Projects;
             }
             else
             {
@@ -153,18 +159,18 @@ namespace ReliabilityAnalysis
             saveFileDialog.ShowDialog();
 
             if (saveFileDialog.FileName != "")
-                if (projects[0].SaveProjectAs(saveFileDialog.FileName) == false)
+                if (Projects[0].SaveProjectAs(saveFileDialog.FileName) == false)
                 {
                     MessageBox.Show("Ошибка записи в файл");
                 }
         }
         private void DeleteElement(object sender, RoutedEventArgs e)
         {
-            projects[0].Elements.Remove(projects[0].SelectedElement);
+            Projects[0].Elements.Remove(Projects[0].SelectedElement);
         }
         private void SaveFile(object sender, RoutedEventArgs e)
         {
-            if (projects[0].SaveProject() == false)
+            if (Projects[0].SaveProject() == false)
             {
                 this.SaveAsFileDialog(null, null);
             }
@@ -176,6 +182,36 @@ namespace ReliabilityAnalysis
         private void ExitFromApp(object sender, RoutedEventArgs e)
         {
             this.Close();
+        }
+        private void Markov_Method(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var markov = new Markov(Projects[0].Lambdas);
+                Projects[0].Results.Clear();
+                Projects[0].Results.Add(new MeanTimeToFailure(markov.MeanTimeToFailure));
+                Projects[0].Results.Add(new FailureRate(markov.FailureRate));
+                Projects[0].Results.Add(new ProbabilityOfNoFailure(markov.FailureRate, 10000));
+                GridProp.ItemsSource = Projects[0].Results;
+
+                GridProp.Items.Refresh();
+            }
+            catch (ArgumentNullException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+        private void ComboInfo_Selected(object sender, RoutedEventArgs e)
+        {
+
+        }
+        private void ComboInfo_Selected_1(object sender, RoutedEventArgs e)
+        {
+
+        }
+        private void ComboInfo_Selected_2(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

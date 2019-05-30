@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ReliabilityAnalysis"
         mc:Ignorable="d"
-        Title="ЭРИ" Height="500" Width="400" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+        Title="Перечень ЭРИ" Height="500" Width="400" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>

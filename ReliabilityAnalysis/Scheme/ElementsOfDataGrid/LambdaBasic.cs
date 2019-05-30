@@ -21,6 +21,14 @@ namespace ReliabilityAnalysis.Scheme.ElementsOfDataGrid
             Param = "Базовая интенсивность отказов";
             Value = lambdaBasic;
         }
+
+        public DataBase.Element Element
+        {
+            get => default(DataBase.Element);
+            set
+            {
+            }
+        }
     }
 
 }

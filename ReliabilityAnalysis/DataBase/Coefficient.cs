@@ -72,8 +72,14 @@ namespace ReliabilityAnalysis.DataBase
             {
                 if ((SelectedParamValue != "") && (ID != null))
                 {
-                    var x = Tables.GetCoefficientValue(this);
-                    return x;
+                    try
+                    {
+                        var x = Tables.GetCoefficientValue(this);
+                        return x;
+                    }catch(ArgumentException ex)
+                    {
+                        throw ex;
+                    }
                 }
                 return 0;
             }
@@ -107,6 +113,14 @@ namespace ReliabilityAnalysis.DataBase
             catch (Exception)
             {
                 return false;
+            }
+        }
+
+        public Element Element
+        {
+            get => default(Element);
+            set
+            {
             }
         }
     }

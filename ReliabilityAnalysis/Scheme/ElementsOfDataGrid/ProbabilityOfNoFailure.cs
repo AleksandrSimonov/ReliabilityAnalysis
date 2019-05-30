@@ -44,5 +44,13 @@ namespace ReliabilityAnalysis.Scheme.ElementsOfDataGrid
                 return Math.Exp(-lambda * Time);
             }
         }
+
+        public Project Project
+        {
+            get => default(Project);
+            set
+            {
+            }
+        }
     }
 }

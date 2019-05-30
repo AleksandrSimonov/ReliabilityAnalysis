@@ -45,5 +45,13 @@ namespace ReliabilityAnalysis.Scheme.ElementsOfDataGrid
                 gammaPercent = (Convert.ToInt32(value));
             }
         }
+
+        public Project Project
+        {
+            get => default(Project);
+            set
+            {
+            }
+        }
     }
 }

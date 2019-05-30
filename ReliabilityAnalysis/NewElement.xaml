@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ReliabilityAnalysis"
-        mc:Ignorable="d" Height="105.356" Width="258.619" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+        mc:Ignorable="d" Height="105.356" Width="258.619" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Title="Добавление ЭРИ">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="182*"/>
