@@ -35,12 +35,19 @@ namespace ReliabilityAnalysis
                 var count = Elements.Count;
                 double lambda;
                 var lambdas = new List<double>();
-                for (int i = 0; i < count; i++)
+                try
                 {
-                    lambda = Convert.ToDouble(Elements[i].LambdaExp.SelectedParamValue);
-                    if (lambda == 0)
-                        throw new ArgumentNullException("Эксплуатационная интенсивность отказов", "Не для всех ЭРИ посчитаны эксплуатационные интенсивности отказов");
-                    lambdas.Add(lambda);
+                    for (int i = 0; i < count; i++)
+                    {
+                        lambda = Convert.ToDouble(Elements[i].LambdaExp.SelectedParamValue);
+                        if (lambda == 0)
+                            throw new ArgumentNullException("Не для всех ЭРИ посчитаны эксплуатационные интенсивности отказов");
+                        lambdas.Add(lambda);
+                    }
+                }
+                catch (Exception)
+                {
+                    throw new ArgumentNullException("Не для всех ЭРИ посчитаны эксплуатационные интенсивности отказов");
                 }
                 return lambdas;
             }

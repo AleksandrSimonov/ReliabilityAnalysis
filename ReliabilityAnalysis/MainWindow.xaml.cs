@@ -48,24 +48,12 @@ namespace ReliabilityAnalysis
         {
             InitializeComponent();
             
-            Tables.StringConnection = @"data source= C:\Users\Александр\source\repos\ReliabilityAnalysis\ReliabilityAnalysis\AppData\data.db";
+            Tables.StringConnection = @"data source=AppData\data.db"; 
 
 
             System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
 
             Projects = new ObservableCollection<Project>();
-
-            Binding binding = new Binding();
-            
-            //binding.ElementName = "myTextBox"; // элемент-источник
-           
-            binding.Path = new PropertyPath("ProjectNumber"); // свойство элемента-источника
-            AppMenu.SetBinding(MenuItem.IsEnabledProperty, binding);
-
-            TextBox tb = new TextBox();
-            
-
-
         }
         private void ShowEriList(object sender, RoutedEventArgs e)
         {
@@ -81,7 +69,10 @@ namespace ReliabilityAnalysis
         }
         private void CreateNewProject(object sender, RoutedEventArgs e)
         {
-            AddNewProject newProject = new AddNewProject(this);
+            if (Projects.Count != 0)
+                MessageBox.Show("Существующий проект будет закрыт!");
+
+            var newProject = new AddNewProject(this);
             newProject.ShowDialog();
 
         }
@@ -107,13 +98,13 @@ namespace ReliabilityAnalysis
         {
             try
             {
-                MonteKarlo monteKarlo = new MonteKarlo(Projects[0].Lambdas, 100000000, 95);
+                MonteKarlo monteKarlo = new MonteKarlo(Projects[0].Lambdas, (int)( Accuracy.Value*10000), Projects[0].Property[3].Value);
                 Projects[0].Results.Clear();
                 Projects[0].Results.Add(new MeanTimeToFailure(monteKarlo.MeanTimeToFailure));
                 Projects[0].Results.Add(new FailureRate(monteKarlo.FailureRate));
-                Projects[0].Results.Add(new ProbabilityOfNoFailure(monteKarlo.FailureRate, 10000));
+                Projects[0].Results.Add(new ProbabilityOfNoFailure(monteKarlo.FailureRate, (long) Projects[0].Property[2].Value));
                 Projects[0].Results.Add(new GammaPercentTimeToFailure(monteKarlo.GammaPercentTimeToFailure));
-                GridProp.ItemsSource = Projects[0].Results;
+                GridProp.ItemsSource = Projects[0].Property.Concat(Projects[0].Results);
 
                 GridProp.Items.Refresh();
             }catch(ArgumentNullException ex)
@@ -130,30 +121,38 @@ namespace ReliabilityAnalysis
         {
             Projects[0].SelectedElement.IsReName = true;
         }
-        private void ReNameBox_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-
-        }
         private void OpenFileDialog(object sender, RoutedEventArgs e)
         {
+            if(Projects.Count!=0)
+                MessageBox.Show("Существующий проект будет закрыт!");
+
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.DefaultExt = "ras";
             openFileDialog.Filter = "Файлы ReliabilityAnalysis|*.ras";
             openFileDialog.ShowDialog();
-            var project = Project.OpenProject(openFileDialog.FileName);
-            if (project != null)
+
+
+
+            if (openFileDialog.FileName != "")
             {
-                Projects.Add(project);
-                TreeViewElements.ItemsSource = Projects;
-            }
-            else
-            {
-                MessageBox.Show("Ошибка чтения файла");
+                var project = Project.OpenProject(openFileDialog.FileName);
+                if (project != null)
+                {
+                    Projects.Clear();
+                    Projects.Add(project);
+                    TreeViewElements.ItemsSource = Projects;
+                    GridProp.ItemsSource = Projects[0].Property.Concat(Projects[0].Results);
+                    GridProp.Items.Refresh();
+                }
+                else
+                {
+                    MessageBox.Show("Ошибка чтения файла");
+                }
             }
         }
         private void SaveAsFileDialog(object sender, RoutedEventArgs e)
         {
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            var saveFileDialog = new SaveFileDialog();
             saveFileDialog.DefaultExt = "ras";
             saveFileDialog.Filter = "Файлы ReliabilityAnalysis|*.ras";
             saveFileDialog.ShowDialog();
@@ -187,31 +186,101 @@ namespace ReliabilityAnalysis
         {
             try
             {
-                var markov = new Markov(Projects[0].Lambdas);
+                var markov = new Markov(Projects[0].Lambdas, Projects[0].Property[3].Value);
                 Projects[0].Results.Clear();
                 Projects[0].Results.Add(new MeanTimeToFailure(markov.MeanTimeToFailure));
                 Projects[0].Results.Add(new FailureRate(markov.FailureRate));
-                Projects[0].Results.Add(new ProbabilityOfNoFailure(markov.FailureRate, 10000));
+                Projects[0].Results.Add(new ProbabilityOfNoFailure(markov.FailureRate,(long) Projects[0].Property[2].Value));
+                Projects[0].Results.Add(new GammaPercentTimeToFailure(markov.GammaPercentTimeToFailure));
                 GridProp.ItemsSource = Projects[0].Results;
 
                 GridProp.Items.Refresh();
             }
             catch (ArgumentNullException ex)
             {
-                MessageBox.Show(ex.Message);
+                MessageBox.Show(ex.ParamName);
             }
         }
-        private void ComboInfo_Selected(object sender, RoutedEventArgs e)
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
+            /*{
+                Point p00 = new Point(30, 10);
+                double step = grid1.ActualWidth / 1.3 / 10.0;
+                grid1.Children.Clear();
+                Line vertL = new Line();
+                vertL.X1 = p00.X;
+                vertL.Y1 = p00.Y;
+                vertL.X2 = p00.X;
+                vertL.Y2 = grid1.ActualHeight/1.7;
+                vertL.Stroke = Brushes.Black;
+                grid1.Children.Add(vertL);
 
+                Line horL = new Line();
+                horL.X1 = vertL.X2;
+                horL.Y1 = vertL.Y2;
+                horL.X2 = grid1.ActualWidth/1.3;
+                horL.Y2 = vertL.Y2;
+                horL.Stroke = Brushes.Black;
+                grid1.Children.Add(horL);
+
+                TextBlock tb;
+             
+                for (byte i = 0; i*step < grid1.ActualWidth / 1.3; i++)
+                {
+                    Line a = new Line();
+                    a.X1 = i * step;
+                    a.X2 = i * step;
+                    a.Y1 = grid1.ActualHeight / 1.7+5;
+                    a.Y2 = grid1.ActualHeight / 1.7-5;
+                    a.Stroke = Brushes.Black;
+                    grid1.Children.Add(a);
+
+                    tb = new TextBlock();
+                    tb.Text = i.ToString();
+                    tb.Margin = new Thickness(p00.X-15, grid1.ActualHeight / 1.7 - i * step, 10, 10);
+                    grid1.Children.Add(tb);
+
+
+           
+                }
+
+                for (byte i = 1; i * step < grid1.ActualHeight / 1.7; i++)
+                {
+                    Line a = new Line();
+                    a.X1 = p00.X-5;
+                    a.X2 = p00.X+5;
+                    a.Y1 = i * step;
+                    a.Y2 = i*step;
+                    a.Stroke = Brushes.Black;
+                    grid1.Children.Add(a);
+                }
+
+                Polyline vertArr = new Polyline();
+                vertArr.Points = new PointCollection();
+                vertArr.Points.Add(new Point(p00.X-5, p00.Y+10));
+                vertArr.Points.Add(new Point(p00.X, p00.Y));
+                vertArr.Points.Add(new Point(p00.X+5, p00.Y+10));
+                vertArr.Stroke = Brushes.Black;
+                grid1.Children.Add(vertArr);
+
+                Polyline horArr = new Polyline();
+                horArr.Points = new PointCollection();
+                horArr.Points.Add(new Point(grid1.ActualWidth / 1.3-10, grid1.ActualHeight / 1.7-5));
+                horArr.Points.Add(new Point(grid1.ActualWidth / 1.3, grid1.ActualHeight / 1.7));
+                horArr.Points.Add(new Point(grid1.ActualWidth / 1.3 - 10, grid1.ActualHeight / 1.7 +5));
+                horArr.Stroke = Brushes.Black;
+                grid1.Children.Add(horArr);
+
+
+            }*/
         }
-        private void ComboInfo_Selected_1(object sender, RoutedEventArgs e)
+        private void ClickAbout(object sender, RoutedEventArgs e)
         {
-
+            MessageBox.Show("Данное программное обеспечение выполнили студенты КНИТУ-КАИ: Симонов А.В. и Хабибулина Л.М.");
         }
-        private void ComboInfo_Selected_2(object sender, RoutedEventArgs e)
+        private void ClickHelp(object sender, RoutedEventArgs e)
         {
-
+            System.Diagnostics.Process.Start(@"Руководство пользователя.docx");
         }
     }
 }

@@ -16,7 +16,7 @@ namespace ReliabilityAnalysis.Scheme.ElementsOfDataGrid
 
         public GammaPercent()
         {
-            Param = "Гамма-процент";
+            Param = "Гамма-процент, %";
         }
         public override double Value
         {

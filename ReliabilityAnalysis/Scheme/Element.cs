@@ -20,11 +20,11 @@ namespace ReliabilityAnalysis.DataBase
         /// </summary>
         /// <param name="item">ID элемента в БД и его описание в проекте</param>
         /// <param name="temperature">Температура элемента</param>
-        public Element(Node item, double temperature)
+        public Element(Node item, ElementOfDataGrid temperature)
         {
 
             IDElement = item;
-            Temperature = temperature;
+            Temperature =temperature.Value;
             Class = Tables.Class.GetName(item.ID_Class);
             Scroll = Tables.Scroll.GetName(item.ID_Class);
             Type = Tables.Type.GetName(item.ID_Type);

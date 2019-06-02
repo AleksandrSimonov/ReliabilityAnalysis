@@ -28,7 +28,7 @@ namespace ReliabilityAnalysis.Scheme.ElementsOfDataGrid
         /// <param name="mtf">Значение средней наработки на отказ</param>
         public MeanTimeToFailure(double mtf)
         {
-            Param = "Средняя наработка на отказ";
+            Param = "Средняя наработка на отказ, ч";
             Value = mtf;
 
         }

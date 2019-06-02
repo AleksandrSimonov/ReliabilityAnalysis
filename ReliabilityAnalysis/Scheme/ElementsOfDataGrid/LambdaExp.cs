@@ -52,7 +52,7 @@ namespace ReliabilityAnalysis.Scheme.ElementsOfDataGrid
         public LambdaExp(double lambdaBasic, Element selectedElement)
         {
             this.selectedElement = selectedElement;
-            Param = "Эксплуатационная интенсивность отказов";
+            Param = "Эксплуатационная интенсивность отказов, 1/ч";
             this.lambdaBasic = lambdaBasic;
         }
     }

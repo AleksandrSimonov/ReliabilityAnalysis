@@ -15,7 +15,7 @@ namespace ReliabilityAnalysis.Scheme.ElementsOfDataGrid
         double timeInHours = 24 * 365 * 5;
         public TimeOfExpluatation()
         {
-            Param = "Время эксплуатации";
+            Param = "Время эксплуатации, ч";
         }
         /// <summary>
         /// Значение времени эксплуатации схемы

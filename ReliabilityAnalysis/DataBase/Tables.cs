@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using SqliteORM;
 using System.Collections.ObjectModel;
 using Ciloci.Flee;
+using ReliabilityAnalysis.Scheme;
 namespace ReliabilityAnalysis.DataBase
 {
     public static class Tables
@@ -190,6 +191,9 @@ namespace ReliabilityAnalysis.DataBase
             [Field] public double Ns { get; set; }
             [Field] public double J { get; set; }
             [Field] public double H { get; set; }
+            [Field] public double Tm { get; set; }
+            [Field] public double L { get; set; }
+            [Field] public double dt { get; set; }
             [ForeignKey(typeof(Type))] public Int64 ID_Type { get; set; }
             [ForeignKey(typeof(Scroll))] public Int64 ID_Scroll { get; set; }
             [ForeignKey(typeof(Class))] public Int64 ID_Class { get; set; }
@@ -321,7 +325,8 @@ namespace ReliabilityAnalysis.DataBase
                 context.Variables["B"] = m.B; context.Variables["Nt"] = m.Nt;
                 context.Variables["G"] = m.G; context.Variables["t"] = coeff.Temperature; 
                 context.Variables["H"] = m.H; context.Variables["value"] = value;
-                context.Variables["J"] = m.J;
+                context.Variables["J"] = m.J; context.Variables["dt"] = m.dt;
+                context.Variables["L"] = m.L; context.Variables["Tm"] = m.Tm;
 
                 IDynamicExpression eDynamic = context.CompileDynamic(rows[0].MathModel);
                 var x = (double)eDynamic.Evaluate();
@@ -343,16 +348,17 @@ namespace ReliabilityAnalysis.DataBase
                         return row.Value;
             throw new ArgumentException("Недопустимое значение переменной");
         }
-        public static ObservableCollection<DataBase.Coefficient> GetCoefficients(Node item, double temperature)
+        public static ObservableCollection<DataBase.Coefficient> GetCoefficients(Node item,  ElementOfDataGrid temperature)
         {
             DbConnection.Initialise(StringConnection);
             ObservableCollection<DataBase.Coefficient> k;
+            List<Coefficient> rows;
 
             using (var adapter = TableAdapter<Coefficient>.Open())
             {
                 k = new ObservableCollection<DataBase.Coefficient>();
 
-                var rows = adapter.Select().Where(tbl => (tbl.ID_Type == item.ID_Type) || (
+                rows = adapter.Select().Where(tbl => (tbl.ID_Type == item.ID_Type) || (
                                                           (tbl.ID_Type == null) && (tbl.ID_Scroll == item.ID_Scroll)) || (
                                                           (tbl.ID_Type == null) && (tbl.ID_Scroll == null) && (tbl.ID_Class == item.ID_Class))).ToList();
 
@@ -365,7 +371,19 @@ namespace ReliabilityAnalysis.DataBase
 
             using (var adapter = TableAdapter<Info>.Open())
                 for (int i = 0; i < k.Count; i++)
-                    k[i].Info = adapter.Select().Where(tbl => tbl.ID_KIndex == Convert.ToInt64(k[i].ID_KIndex)).ToList();
+                {
+                    try
+                    {
+                        k[i].Info = rows.Where(tbl => (tbl.ID_KIndex == Convert.ToInt64(k[i].ID_KIndex))).Select(tbl =>
+                        {
+                            return adapter.Select().FirstOrDefault(info => info.ID == tbl.Info).Discription;
+                        }).ToList();
+                    }
+                    catch (Exception)
+                    {
+                        k[i].Info = new List<string>();
+                    }
+                }
 
             using (var adapter = TableAdapter<KIndex>.Open())
                 for (int i = 0; i < k.Count; i++)
@@ -376,7 +394,7 @@ namespace ReliabilityAnalysis.DataBase
                     k[i].ParamDiscription = row.ParamDiscription;
                     k[i].Discription = row.Discription;
                     k[i].ID = item;
-                    k[i].Temperature = temperature;
+                    k[i].setTemperature(temperature.SelectedParamValue);
                 }
 
             return k;
@@ -388,7 +406,10 @@ namespace ReliabilityAnalysis.DataBase
             var k = new DataBase.Coefficient();
 
             using (var adapter = TableAdapter<Info>.Open())
-                k.Info = adapter.Select().Where(tbl => tbl.ID_KIndex == Convert.ToInt64(idOfIndex)).ToList();
+                k.Info = adapter.Select().Where(tbl => tbl.ID_KIndex == Convert.ToInt64(idOfIndex)).Select(info=>
+                {
+                    return info.Discription;
+                }).ToList();
 
             using (var adapter = TableAdapter<KIndex>.Open())
             {

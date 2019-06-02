@@ -36,7 +36,7 @@ namespace ReliabilityAnalysis.Scheme.ElementsOfDataGrid
 
         public Temperature()
         {
-            Param = "Температура среды";
+            Param = "Температура среды, °С";
         }
     }
 }

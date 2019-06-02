@@ -68,7 +68,7 @@ namespace ReliabilityAnalysis.Scheme
                 return x;
             }
         }
-        public List<Tables.Info> Info { get; set; }
+        public List<string> Info { get; set; }
         /// <summary>
         /// Значение столбца "Наименование"
         /// </summary>
@@ -86,7 +86,7 @@ namespace ReliabilityAnalysis.Scheme
         }
         public ElementOfDataGrid()
         {
-            Info = new List<Tables.Info>();
+            Info = new List<string>();
         }
 
     }

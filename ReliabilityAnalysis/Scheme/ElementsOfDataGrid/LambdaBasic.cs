@@ -18,7 +18,7 @@ namespace ReliabilityAnalysis.Scheme.ElementsOfDataGrid
         /// <param name="lambdaBasic">Базовая интенсивность отказов</param>
         public LambdaBasic(double lambdaBasic)
         {
-            Param = "Базовая интенсивность отказов";
+            Param = "Базовая интенсивность отказов, 1/ч";
             Value = lambdaBasic;
         }
 

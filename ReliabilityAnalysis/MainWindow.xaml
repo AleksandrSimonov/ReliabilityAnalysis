@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ReliabilityAnalysis"
         mc:Ignorable="d"
-        Title="ReliabilityAnalysis" Height="535.5" Width="626" WindowStartupLocation="CenterScreen" IsHitTestVisible="True">
+        Title="Анализ надежности электронных средств" Height="535.5" Width="626" WindowStartupLocation="CenterScreen" IsHitTestVisible="True">
     <Window.Resources>
         <!--A Style that affects all TextBlocks-->
 
@@ -93,18 +93,37 @@
                 </MenuItem>
                 <Separator  Visibility="Collapsed"/>
                 <MenuItem Header="Выбрать метод анализа" Style="{StaticResource isEriIsUnLock}">
-                    <MenuItem Header="Метод Монте-Карло" Click="Method_MonteKarlo"/>
+                    <MenuItem Header="Метод Монте-Карло">
+                        <Grid Height="60">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="50"/>
+                                <ColumnDefinition Width="100"/>
+                                <ColumnDefinition Width="50"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30"></RowDefinition>
+                                <RowDefinition Height="30*"></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <Slider Name="Accuracy" Grid.Row="0" Grid.Column="1"  Minimum="1" Maximum="10" TickFrequency="1" TickPlacement="BottomRight"
+        IsSelectionRangeEnabled="True">
+
+                            </Slider>
+                            <Button  Grid.Row="1" Grid.Column="1" Content="Выбрать"  Click="Method_MonteKarlo"/>
+                            <Label Grid.Column="0" Grid.Row="0" Content="Грубо"/>
+                            <Label Grid.Column="2" Grid.Row="0" Content="Точно"/>
+                        </Grid>
+                    </MenuItem>
                     <MenuItem Header="Марковские цепи" Click="Markov_Method"/>
                 </MenuItem>
 
             </MenuItem>
-            <MenuItem Header="О программе">
-                <MenuItem Header="Помощь">
+            <MenuItem Header="О программе" Click="MenuItem_Click" Visibility="Visible">
+                <MenuItem Header="Помощь" Click="ClickHelp">
                     <MenuItem.Icon>
                         <Image Source="icons\help.png"></Image>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="О авторах">
+                <MenuItem Header="О авторах" Click="ClickAbout">
                     <MenuItem.Icon>
                         <Image Source="icons\about.png"></Image>
                     </MenuItem.Icon>
@@ -154,18 +173,9 @@
             <TabControl Grid.Column="1" >
                 <TabItem Header="Свойства">
                     <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="7*"/>
-                            <RowDefinition Height="99*"/>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="36*"/>
-                            <ColumnDefinition Width="61*"/>
-                            <ColumnDefinition Width="137*"/>
-                        </Grid.ColumnDefinitions>
-                        <DataGrid Name="GridProp" AutoGenerateColumns="False" CanUserResizeRows="False" CanUserDeleteRows="False" CanUserAddRows="False" Margin="0,0,0,49" Grid.ColumnSpan="3" Grid.RowSpan="2" >
+                        <DataGrid Name="GridProp" AutoGenerateColumns="False" CanUserResizeRows="False" CanUserDeleteRows="False" CanUserAddRows="False" Margin="0,0,0,49" CanUserSortColumns="False" CanUserResizeColumns="True">
                             <DataGrid.Columns>
-                                <DataGridTemplateColumn Header="Наименования"  Width="*">
+                                <DataGridTemplateColumn Header="Наименования"  Width="*" IsReadOnly="True" CanUserResize="True">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <Grid>
@@ -174,7 +184,7 @@
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
-                                <DataGridTemplateColumn  Header="Значения"  Width="150">
+                                <DataGridTemplateColumn  Header="Значения"  Width="150" CanUserResize="True">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <Grid>
@@ -200,11 +210,8 @@
                                     </DataGridTemplateColumn.CellTemplate>
 
                                 </DataGridTemplateColumn>
-
                             </DataGrid.Columns>
-
                         </DataGrid>
-                        <Button Content="Ок" Margin="264,352,10,10" Click="Confirm" Grid.Column="2" Grid.Row="1"/>
                     </Grid>
                 </TabItem>
                 <TabItem Header="Расчет" GotFocus="TabItem_GotFocus" Visibility="Collapsed">
@@ -234,9 +241,18 @@
                 </TabItem>
                 <TabItem Header="Результат" Visibility="Collapsed">
                     <Grid>
-                        <Canvas>
-                            
-                        </Canvas>
+                        <TabControl>
+                            <TabItem Header="Вероятность безотказной работы">
+                                <Canvas Name="grid1">
+
+                                </Canvas>
+                            </TabItem>
+                            <TabItem Header="Гистограмма">
+                                <Canvas>
+
+                                </Canvas>
+                            </TabItem>
+                        </TabControl>
                     </Grid>
                 </TabItem>
             </TabControl>

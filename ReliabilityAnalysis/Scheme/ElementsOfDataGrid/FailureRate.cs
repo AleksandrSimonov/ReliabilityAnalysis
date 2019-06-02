@@ -28,7 +28,7 @@ namespace ReliabilityAnalysis.Scheme.ElementsOfDataGrid
         /// <param name="fr">Интенсивность отказов</param>
         public FailureRate(double fr)
         {
-            Param = "Интенсивность отказов";
+            Param = "Интенсивность отказов, 1/ч";
             Value = fr;
         }
 

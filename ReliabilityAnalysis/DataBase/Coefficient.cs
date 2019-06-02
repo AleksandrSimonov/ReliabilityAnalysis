@@ -25,9 +25,18 @@ namespace ReliabilityAnalysis.DataBase
     public class Coefficient: ElementOfDataGrid
     {
         private double value = 0;
+        string t;
         public Node ID { get; set; }
         public string Name { get; set; }
-        public double Temperature { get; set; }
+        public void setTemperature( string temperature)
+        {
+            t = temperature;
+        }
+        public double Temperature { get
+            {
+                return Convert.ToDouble(t);
+            }
+        }
         public string ParamName { get; set; }
         public string Discription { get; set; }
         public string ParamDiscription { get; set; }
@@ -58,10 +67,7 @@ namespace ReliabilityAnalysis.DataBase
         {
             get
             {
-                    var listInfo = new List<string>();
-                    foreach (var info in Info)
-                        listInfo.Add(info.Discription);
-                    return listInfo;
+                    return Info;
             }
            
         }

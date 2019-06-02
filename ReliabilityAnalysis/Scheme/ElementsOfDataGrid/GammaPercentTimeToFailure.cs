@@ -28,7 +28,7 @@ namespace ReliabilityAnalysis.Scheme.ElementsOfDataGrid
         /// <param name="gptf">Значение гамма-процентной наработки до отказа</param>
         public GammaPercentTimeToFailure(double gptf)
         {
-            Param = "Гамма-процентная наработка до отказа";
+            Param = "Гамма-процентная наработка до отказа, ч";
             Value = gptf;
 
         }

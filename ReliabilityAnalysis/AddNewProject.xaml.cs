@@ -38,9 +38,13 @@ namespace ReliabilityAnalysis
 
         private void AddNewProjectClick(object sender, RoutedEventArgs e)
         {
+            mainWindow.Projects.Clear();
             mainWindow.ProjectNumber = 1;
             mainWindow.Projects.Add(new Project(projectName.Text));
             mainWindow.TreeViewElements.ItemsSource = mainWindow.Projects;
+            mainWindow.GridProp.ItemsSource = mainWindow.Projects[0].Property.Concat(mainWindow.Projects[0].Results);
+            mainWindow.GridProp.Items.Refresh();
+
             this.Close();
         }
     }

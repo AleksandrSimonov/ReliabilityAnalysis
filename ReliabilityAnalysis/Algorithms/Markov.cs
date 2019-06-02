@@ -11,6 +11,20 @@ namespace ReliabilityAnalysis
     {
         private List<double> lambdas;
 
+        /// <summary>
+        /// Гамма-процент
+        /// </summary>
+        public double GammaPercent { get; }
+        /// <summary>
+        /// Гамма-процентная наработка до отказа
+        /// </summary>
+        public double GammaPercentTimeToFailure
+        {
+            get
+            {
+                return -MeanTimeToFailure * Math.Log(GammaPercent / 100.0);
+            }
+        }
         public double MeanTimeToFailure { get; } //Средняя наработка на отказ
         public double FailureRate //Интенсивность отказов
         {
@@ -33,10 +47,16 @@ namespace ReliabilityAnalysis
             return 1.0 / lambdas.Sum();
         }
 
-        public Markov(List<double> lambdas)
+        /// <summary>
+        /// Анализ надежности методом Марковских цепей
+        /// </summary>
+        /// <param name="lambdas">Список эксплуатационных интенсивностей отказов всех Эри, входящих в проект</param>
+        /// <param name="gammaPercent">Гамма-процент</param>
+        public Markov(List<double> lambdas, double gammaPercent)
         {
             this.lambdas = lambdas;
             MeanTimeToFailure = MTF();
+            GammaPercent = gammaPercent;
         }
 
 

@@ -9,7 +9,7 @@
     <ShowAsAssociation>
       <Property Name="MainWindow" />
     </ShowAsAssociation>
-    <Lollipop Position="0.2" Collapsed="true" />
+    <Lollipop Position="0.481" Collapsed="true" />
   </Class>
   <Class Name="ReliabilityAnalysis.Markov" Collapsed="true">
     <Position X="30" Y="6" Width="1.5" />
@@ -35,7 +35,7 @@
   <Class Name="ReliabilityAnalysis.MainWindow" Collapsed="true" BaseTypeListCollapsed="true">
     <Position X="35" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAQAAYAAQAQAgACIAAAAAAFAAAEQAFAIAAARCCUA=</HashCode>
+      <HashCode>AAAAAQAAYAAQAQAgACIAAgAAAFAAAEQAFAIAAARCCUA=</HashCode>
       <FileName>MainWindow.xaml.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
