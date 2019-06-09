@@ -61,6 +61,12 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="LiveCharts, Version=0.9.7.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
+      <HintPath>..\packages\LiveCharts.0.9.7\lib\net45\LiveCharts.dll</HintPath>
+    </Reference>
+    <Reference Include="LiveCharts.Wpf, Version=0.9.7.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
+      <HintPath>..\packages\LiveCharts.Wpf.0.9.7\lib\net45\LiveCharts.Wpf.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Win32.Primitives, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Win32.Primitives.4.3.0\lib\net46\Microsoft.Win32.Primitives.dll</HintPath>
     </Reference>
@@ -182,6 +188,9 @@
     <Compile Include="AddNewProject.xaml.cs">
       <DependentUpon>AddNewProject.xaml</DependentUpon>
     </Compile>
+    <Compile Include="AlgorithmAccuracy.xaml.cs">
+      <DependentUpon>AlgorithmAccuracy.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Algorithms\Markov.cs" />
     <Compile Include="Algorithms\MonteKarlo.cs" />
     <Compile Include="GraphicView\CreateCanvasWithGraphic.cs" />
@@ -226,6 +235,10 @@
       <DependentUpon>ERI.xaml</DependentUpon>
     </Compile>
     <Page Include="AddNewProject.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="AlgorithmAccuracy.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

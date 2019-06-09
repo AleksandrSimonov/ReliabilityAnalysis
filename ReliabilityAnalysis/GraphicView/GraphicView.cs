@@ -7,62 +7,68 @@ using Ciloci.Flee;
 using System.Windows.Shapes;
 using System.Drawing;
 using System.Windows.Media;
+using LiveCharts;
+using LiveCharts.Configurations;
+using LiveCharts.Wpf;
+using LiveCharts.Defaults;
+using Brushes = System.Windows.Media.Brushes;
 
 namespace ReliabilityAnalysis.GraphicView
 {
 
-    class GraphicView
+   static class GraphicView
     {
-        ExpressionContext context;
-        List<string> s;
 
-        public GraphicView()
+        static public SeriesCollection Reliability(double lambda)
         {
-            context = new ExpressionContext();
-            context.Imports.AddType(typeof(Math));
-            s = context.Variables.Keys.ToList();
-        }
+            /* var func = new CartesianMapper<double>();
 
-        public List<PointF> PointsOfFunctions(string expression, double left, double right, double step)
-        {
-            IDynamicExpression eDynamic;
-            var points = new List<PointF>();
+             var pow = 7;//(int)Math.Floor(Math.Pow(Math.Log(Math.Pow(10, -11)) / -lambda, 0.1));
 
-            for (double x = left; x < right; x += step)
-            {
-                if (x + step > right)
-                    x = right;
-                context.Variables["x"] = x;
-                eDynamic = context.CompileDynamic(expression);
-                points.Add(new PointF((float)x, (float)eDynamic.Evaluate()));
+             func.X((value, index) => value * Math.Pow(10, pow));
+             func.Y((value, index) => Math.Exp(-lambda * value * Math.Pow(10, pow)));*/
+           int Base = 10;
 
-            }
-            return points;
-        }
-        public List<System.Windows.Shapes.Rectangle> FailureRateDistribution(List<double> lambdas)
-        {
-            var min = lambdas.Min();
-            var max = lambdas.Max();
-            var step = (max - min) / 10.0;
+            var mapper = Mappers.Xy<ObservablePoint>()
+                .X(point => Math.Log(point.X, Base)) //a 10 base log scale in the X axis
+                .Y(point => point.Y);
 
-            var rectangles = new List<System.Windows.Shapes.Rectangle>();
+            var collection = new List<ObservablePoint>();
 
-            for (int i = 0; i < lambdas.Count; i++)
-            {
-                rectangles.Add(new System.Windows.Shapes.Rectangle() { Width = 20, Height = lambdas[i] / step, Fill = new SolidColorBrush(System.Windows.Media.Color.FromRgb(50, 0, 0)) });
-            }
-            return rectangles;
-        }
-        /*  public  class FuncPoint
-            {
-                public double X { get; set; }
-                public double Y { get; set; }
 
-                public FuncPoint(double x, double y)
+            for (double i = 0; i < 10; i+=0.1)
+                collection.Add(new ObservablePoint(Math.Pow(10, i), Math.Exp(-lambda * Math.Pow(10, i))));
+
+            return new SeriesCollection(mapper){
+
+                new LineSeries
                 {
-                    X = x;
-                    Y = y;
-                }
-            }*/
+                    Values = new ChartValues<ObservablePoint>(collection)
+                 ,
+               Title="P(time)=",
+               Uid="time",
+                PointGeometry = null
+
+                },
+            };
+            //Formatter = value => Math.Pow(Base, value).ToString("N");
+        }
+        static  public SeriesCollection  Histograma(List<double> lambdas)
+        {
+            return new SeriesCollection{
+
+                new ColumnSeries
+                {
+                    
+                    Values = new ChartValues<double>(lambdas),
+               Title="λ=",
+
+
+
+                },
+            };
+
+        }
+       
     }
 }

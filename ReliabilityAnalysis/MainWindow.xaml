@@ -1,10 +1,11 @@
 ﻿<Window x:Class="ReliabilityAnalysis.MainWindow"
+        xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ReliabilityAnalysis"
-        mc:Ignorable="d"
+        mc:Ignorable="d" Name="MainWindow1"
         Title="Анализ надежности электронных средств" Height="535.5" Width="626" WindowStartupLocation="CenterScreen" IsHitTestVisible="True">
     <Window.Resources>
         <!--A Style that affects all TextBlocks-->
@@ -80,7 +81,7 @@
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
-            <MenuItem Header="Анализ">
+            <MenuItem Header="Анализ" Style="{StaticResource isProjectIsUnLock}">
                 <MenuItem Header="Начать" IsEnabled="False" Visibility="Collapsed">
                     <MenuItem.Icon>
                         <Image Source="icons\start.png"></Image>
@@ -92,35 +93,17 @@
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator  Visibility="Collapsed"/>
-                <MenuItem Header="Выбрать метод анализа" Style="{StaticResource isEriIsUnLock}">
-                    <MenuItem Header="Метод Монте-Карло">
-                        <Grid Height="60">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="50"/>
-                                <ColumnDefinition Width="100"/>
-                                <ColumnDefinition Width="50"/>
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="30"></RowDefinition>
-                                <RowDefinition Height="30*"></RowDefinition>
-                            </Grid.RowDefinitions>
-                            <Slider Name="Accuracy" Grid.Row="0" Grid.Column="1"  Minimum="1" Maximum="10" TickFrequency="1" TickPlacement="BottomRight"
-        IsSelectionRangeEnabled="True">
-
-                            </Slider>
-                            <Button  Grid.Row="1" Grid.Column="1" Content="Выбрать"  Click="Method_MonteKarlo"/>
-                            <Label Grid.Column="0" Grid.Row="0" Content="Грубо"/>
-                            <Label Grid.Column="2" Grid.Row="0" Content="Точно"/>
-                        </Grid>
-                    </MenuItem>
-                    <MenuItem Header="Марковские цепи" Click="Markov_Method"/>
+               <!-- <MenuItem Header="Выбрать метод анализа" >-->
+                    <MenuItem Header="Метод Монте-Карло" Click="Method_MonteKarlo"/>
+                
+                <MenuItem Header="Выбрать точность" Click="MenuItem_Click_1">
                 </MenuItem>
 
             </MenuItem>
             <MenuItem Header="О программе" Click="MenuItem_Click" Visibility="Visible">
                 <MenuItem Header="Помощь" Click="ClickHelp">
                     <MenuItem.Icon>
-                        <Image Source="icons\help.png"></Image>
+                        <Image Source="icons\help.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem Header="О авторах" Click="ClickAbout">
@@ -171,11 +154,11 @@
                 </TreeView.ItemTemplate>
             </TreeView>
             <TabControl Grid.Column="1" >
-                <TabItem Header="Свойства">
+                <TabItem Header="Свойства элемента">
                     <Grid>
                         <DataGrid Name="GridProp" AutoGenerateColumns="False" CanUserResizeRows="False" CanUserDeleteRows="False" CanUserAddRows="False" Margin="0,0,0,49" CanUserSortColumns="False" CanUserResizeColumns="True">
                             <DataGrid.Columns>
-                                <DataGridTemplateColumn Header="Наименования"  Width="*" IsReadOnly="True" CanUserResize="True">
+                                <DataGridTemplateColumn Header="Описание"  Width="*" IsReadOnly="True" CanUserResize="True">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <Grid>
@@ -184,7 +167,7 @@
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
-                                <DataGridTemplateColumn  Header="Значения"  Width="150" CanUserResize="True">
+                                <DataGridTemplateColumn  Header="Значение"  Width="150" CanUserResize="True">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <Grid>
@@ -239,18 +222,40 @@
                         </DataGrid.Columns>
                     </DataGrid>
                 </TabItem>
-                <TabItem Header="Результат" Visibility="Collapsed">
+                <TabItem Name="ReliabilityGrid" Header="Показатели безотказности" Visibility="Collapsed">
                     <Grid>
                         <TabControl>
                             <TabItem Header="Вероятность безотказной работы">
-                                <Canvas Name="grid1">
+                                <lvc:CartesianChart Name="Graphic" Series="{Binding SerieFunc}"  >
+                                    <lvc:CartesianChart.AxisX>
+                                        <lvc:LogarithmicAxis Foreground="Black"  Base="10.0" Title="Время эксплуатации t, ч" >
+                                            <lvc:LogarithmicAxis.Separator>
+                                                <lvc:Separator StrokeThickness="1" IsEnabled="True" ></lvc:Separator>
+                                            </lvc:LogarithmicAxis.Separator>
+                                        </lvc:LogarithmicAxis>
+                                    </lvc:CartesianChart.AxisX>
+                                    <lvc:CartesianChart.AxisY>
+                                        <lvc:Axis Title="Вероятность безотказной работы P(t), %" Foreground="Black"/>
+                                    </lvc:CartesianChart.AxisY>
+                                </lvc:CartesianChart>
 
-                                </Canvas>
                             </TabItem>
-                            <TabItem Header="Гистограмма">
-                                <Canvas>
-
-                                </Canvas>
+                            <TabItem Header="Интенсивность отказов">
+                                <lvc:CartesianChart Name="Histograma" Series="{Binding SerieHis}"  >
+                                    <lvc:CartesianChart.AxisY>
+                                        <lvc:Axis Title="Интенсивность отказов λ, 1/ч" Foreground="Black" />
+                                    </lvc:CartesianChart.AxisY>
+                                    <lvc:CartesianChart.AxisX>
+                                        <lvc:Axis  Labels="{Binding LabelsHis}" Position="LeftBottom" Foreground="Black">
+                                            <lvc:Axis.Separator >
+                                                <lvc:Separator Step="1"/>
+                                            </lvc:Axis.Separator>
+                                        </lvc:Axis>
+                                    </lvc:CartesianChart.AxisX>
+                                    <lvc:CartesianChart.DataTooltip>
+                                        <lvc:DefaultTooltip SelectionMode="SharedYValues"  />
+                                    </lvc:CartesianChart.DataTooltip>
+                                </lvc:CartesianChart>
                             </TabItem>
                         </TabControl>
                     </Grid>

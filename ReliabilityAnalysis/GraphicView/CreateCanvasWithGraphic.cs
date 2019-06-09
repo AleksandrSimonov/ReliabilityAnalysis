@@ -6,18 +6,22 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Drawing;
 using System.Windows.Shapes;
+using LiveCharts;
+using LiveCharts.Configurations;
+using LiveCharts.Wpf;
 
 namespace ReliabilityAnalysis.GraphicView
 {
-   public static class CreateCanvasWithGraphic
+    public static class CreateCanvasWithGraphic
     {
-        public static Canvas FunctionsCanvas(List<PointF> points)
+        public static SeriesCollection FunctionsCanvas()
         {
-            var functionCanvas = new Canvas();
-            functionCanvas.Background = System.Windows.Media.Brushes.LightSteelBlue;
 
-            Line oYnew = new Line();
+
             return null;
         }
     }
 }
+  
+
+

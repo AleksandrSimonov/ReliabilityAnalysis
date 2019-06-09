@@ -21,6 +21,9 @@ using ReliabilityAnalysis.DataBase;
 using ReliabilityAnalysis.Scheme;
 using ReliabilityAnalysis.Algorithms;
 using ReliabilityAnalysis.Scheme.ElementsOfDataGrid;
+using LiveCharts;
+using LiveCharts.Wpf;
+using ReliabilityAnalysis.GraphicView;
 
 
 namespace ReliabilityAnalysis
@@ -31,6 +34,14 @@ namespace ReliabilityAnalysis
     public partial class MainWindow : Window
     {
         public int ProjectNumber { get; set; }
+
+        public SeriesCollection SerieFunc { get; set; }
+        public SeriesCollection SerieHis { get; set; }
+        public Func<double, string> Formatter { get; set; }
+        public ObservableCollection<string> LabelsHis { get; set; }
+        public int Accuracy { get; set; }
+
+
 
         public ObservableCollection<Project> Projects { get; set; }
        
@@ -54,6 +65,8 @@ namespace ReliabilityAnalysis
             System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
 
             Projects = new ObservableCollection<Project>();
+            Accuracy = 1;
+
         }
         private void ShowEriList(object sender, RoutedEventArgs e)
         {
@@ -98,15 +111,22 @@ namespace ReliabilityAnalysis
         {
             try
             {
-                MonteKarlo monteKarlo = new MonteKarlo(Projects[0].Lambdas, (int)( Accuracy.Value*10000), Projects[0].Property[3].Value);
+                MonteKarlo monteKarlo = new MonteKarlo(Projects[0].Lambdas, Convert.ToInt32( 100*Math.Pow(10, Accuracy)), Projects[0].Property[3].Value);
                 Projects[0].Results.Clear();
                 Projects[0].Results.Add(new MeanTimeToFailure(monteKarlo.MeanTimeToFailure));
                 Projects[0].Results.Add(new FailureRate(monteKarlo.FailureRate));
                 Projects[0].Results.Add(new ProbabilityOfNoFailure(monteKarlo.FailureRate, (long) Projects[0].Property[2].Value));
                 Projects[0].Results.Add(new GammaPercentTimeToFailure(monteKarlo.GammaPercentTimeToFailure));
                 GridProp.ItemsSource = Projects[0].Property.Concat(Projects[0].Results);
-
+;
+                SerieFunc = GraphicView.GraphicView.Reliability(monteKarlo.FailureRate);
+                SerieHis = GraphicView.GraphicView.Histograma(Projects[0].Lambdas);
+                LabelsHis = new ObservableCollection<string>( Projects[0].Elements.Select((el) => { return el.Designation; }));
+                Formatter = value => Math.Pow(10, value).ToString("N");
+                ReliabilityGrid.Visibility = Visibility.Visible;
+                DataContext = this;
                 GridProp.Items.Refresh();
+
             }catch(ArgumentNullException ex)
             {
                 MessageBox.Show(ex.Message);
@@ -193,6 +213,13 @@ namespace ReliabilityAnalysis
                 Projects[0].Results.Add(new ProbabilityOfNoFailure(markov.FailureRate,(long) Projects[0].Property[2].Value));
                 Projects[0].Results.Add(new GammaPercentTimeToFailure(markov.GammaPercentTimeToFailure));
                 GridProp.ItemsSource = Projects[0].Results;
+
+                SerieFunc = GraphicView.GraphicView.Reliability(markov.FailureRate);
+                SerieHis = GraphicView.GraphicView.Histograma(Projects[0].Lambdas);
+                LabelsHis = new ObservableCollection<string>(Projects[0].Elements.Select((el) => { return el.Designation; }));
+                Formatter = value => Math.Pow(10, value).ToString("N");
+                ReliabilityGrid.Visibility = Visibility.Visible;
+                DataContext = this;
 
                 GridProp.Items.Refresh();
             }
@@ -281,6 +308,12 @@ namespace ReliabilityAnalysis
         private void ClickHelp(object sender, RoutedEventArgs e)
         {
             System.Diagnostics.Process.Start(@"Руководство пользователя.docx");
+        }
+
+        private void MenuItem_Click_1(object sender, RoutedEventArgs e)
+        {
+            var a = new AlgorithmAccuracy(this);
+            a.Show();
         }
     }
 }
