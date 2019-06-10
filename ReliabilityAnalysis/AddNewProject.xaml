@@ -5,16 +5,21 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ReliabilityAnalysis"
         mc:Ignorable="d"
-        Title="Создание нового проекта" Height="96.894" Width="472.944" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
-    <Grid>
+        Title="Создание нового проекта" Height="109.996" Width="417.997" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+    <Grid >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="130"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="230"/>
+            <ColumnDefinition Width="90"/>
             <ColumnDefinition Width="90"/>
         </Grid.ColumnDefinitions>
 
-        <TextBox Name="projectName" TextWrapping="Wrap" Text="Новый проект"   VerticalContentAlignment="Center"  Grid.Column="1" Margin="10" />
-        <Button Content="Добавить"  Click="AddNewProjectClick"  Grid.Column="2" Margin="10"/>
-        <Label Content="Название проекта"  Grid.Column="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+        <TextBox Name="projectName" TextWrapping="Wrap" Text="Новый проект"   VerticalContentAlignment="Center" Grid.Row="1" Grid.Column="0" Margin="10" />
+        <Button Content="Добавить"  Click="AddNewProjectClick"  Grid.Column="1" Margin="10" Grid.Row="1" />
+        <Button Content="Отмена"  Click="CancelClick"  Grid.Column="2" Margin="10" Grid.Row="1"/>
+        <Label Content="Введите название нового проекта"  Grid.Column="0" Grid.Row="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Grid.ColumnSpan="3" Margin="10,0"/>
     </Grid>
 </Window>

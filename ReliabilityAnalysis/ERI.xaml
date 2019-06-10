@@ -8,10 +8,10 @@
         Title="Перечень ЭРИ" Height="500" Width="400" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="40"/>
+
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <TreeView Grid.Row="1" Name="TreeView" SelectedItemChanged="SelectItem">
+        <TreeView Grid.Row="0" Name="TreeView" SelectedItemChanged="SelectItem">
             <TreeView.ItemTemplate>
                 <HierarchicalDataTemplate ItemsSource="{Binding Path=Nodes}" >
                     <TextBlock Text="{Binding Name}"  Name="eriName"/>

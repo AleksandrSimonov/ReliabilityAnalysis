@@ -51,5 +51,10 @@ namespace ReliabilityAnalysis
             else
                 MessageBox.Show("ЭРИ с таким обозначением уже есть в проекте!");
         }
+
+        private void CancelClick(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
     }
 }

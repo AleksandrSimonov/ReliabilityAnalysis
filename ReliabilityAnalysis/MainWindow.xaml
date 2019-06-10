@@ -94,9 +94,9 @@
                 </MenuItem>
                 <Separator  Visibility="Collapsed"/>
                <!-- <MenuItem Header="Выбрать метод анализа" >-->
-                    <MenuItem Header="Метод Монте-Карло" Click="Method_MonteKarlo"/>
+                    <MenuItem Header="Начать" Click="Method_MonteKarlo"/>
                 
-                <MenuItem Header="Выбрать точность" Click="MenuItem_Click_1">
+                <MenuItem Header="Настройка точности" Click="MenuItem_Click_1">
                 </MenuItem>
 
             </MenuItem>
@@ -228,7 +228,7 @@
                             <TabItem Header="Вероятность безотказной работы">
                                 <lvc:CartesianChart Name="Graphic" Series="{Binding SerieFunc}"  >
                                     <lvc:CartesianChart.AxisX>
-                                        <lvc:LogarithmicAxis Foreground="Black"  Base="10.0" Title="Время эксплуатации t, ч" >
+                                        <lvc:LogarithmicAxis Foreground="Black" LabelFormatter="{Binding Formatter}"   Base="10.0" Title="Время эксплуатации t, ч" >
                                             <lvc:LogarithmicAxis.Separator>
                                                 <lvc:Separator StrokeThickness="1" IsEnabled="True" ></lvc:Separator>
                                             </lvc:LogarithmicAxis.Separator>

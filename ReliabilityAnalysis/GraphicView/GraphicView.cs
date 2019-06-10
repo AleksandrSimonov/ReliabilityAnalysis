@@ -45,8 +45,8 @@ namespace ReliabilityAnalysis.GraphicView
                 {
                     Values = new ChartValues<ObservablePoint>(collection)
                  ,
-               Title="P(time)=",
-               Uid="time",
+               Title="P(t)=",
+               Uid="t",
                 PointGeometry = null
 
                 },
@@ -62,7 +62,6 @@ namespace ReliabilityAnalysis.GraphicView
                     
                     Values = new ChartValues<double>(lambdas),
                Title="λ=",
-
 
 
                 },

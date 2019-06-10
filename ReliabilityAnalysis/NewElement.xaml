@@ -4,15 +4,22 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ReliabilityAnalysis"
-        mc:Ignorable="d" Height="105.356" Width="258.619" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Title="Добавление ЭРИ">
-    <Grid>
+        mc:Ignorable="d" Height="110" Width="318" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Title="Добавление ЭРИ">
+    <Grid  >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30*"/>
+        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="182*"/>
-            <ColumnDefinition Width="71*"/>
+
+            <ColumnDefinition Width="150"/>
+            <ColumnDefinition Width="70"/>
         </Grid.ColumnDefinitions>
-        <Button Content="Добавить" HorizontalAlignment="Left" Margin="159,41,0,0" VerticalAlignment="Top" Width="75" IsCancel="True" Click="AddEriToProject" Grid.ColumnSpan="2"/>
-        <TextBox x:Name="Designation" HorizontalAlignment="Left" Height="23" Margin="26,41,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
-        <Label Content="Введите позиционное обозначение" HorizontalAlignment="Left" Margin="26,0,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
+        <Label Content="Введите позиционное обозначение" HorizontalContentAlignment="Center" Grid.Row="0" Grid.ColumnSpan="2" Margin="10,0,-74,0"/>
+        <Button Content="Отмена"  Click="CancelClick" Grid.Column="1"  Grid.Row="1" Margin="81,5,-76,3" />
+        <Button Content="Добавить"  Click="AddEriToProject" Grid.Column="1" Grid.Row="1" Margin="5,5,0,3"/>
+        <TextBox x:Name="Designation"   Grid.Column="0" Grid.Row="1" Margin="10,0,0,0" />
 
     </Grid>
 </Window>

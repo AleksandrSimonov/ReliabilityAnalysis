@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ReliabilityAnalysis"
         mc:Ignorable="d"
-        Title="AlgorithmAccuracy" Height="111" Width="209" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+        Title="Настройка точности" Height="111" Width="209" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid Height="60">
             <Grid.ColumnDefinitions>
